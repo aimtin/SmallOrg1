@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+        Add Item
+    </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="close()"><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+	<ion-item>
+		<ion-label floating primary>Name</ion-label>
+		<ion-input [(ngModel)]="orgInfo.name" formControlName="name"
+               type="text" id="name" spellcheck="false" autocapitalize="off">
+		</ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('name')" danger padding-left>Invalid Name</p>
+	
+	<ion-item>
+		<ion-label floating primary>Address</ion-label>
+		<ion-textarea [(ngModel)]="orgInfo.address" formControlName="address" type="text"
+                   id="address" spellcheck="false" autocapitalize="off">
+		</ion-textarea>
+	</ion-item>
+    <p *ngIf="!isValid('address')" danger padding-left>Invalid Address</p>
+	  
+    <ion-item>
+        <ion-label floating primary>Email</ion-label>
+        <ion-input [(ngModel)]="orgInfo.email" formControlName="email"
+                   type="text" id="email" spellcheck="false" autocapitalize="off">
+        </ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('email')" danger padding-left>Invalid Email</p>
+	
+	<div class="upload">
+    <input type="file" name="upload"/>
+	</div>
+
+
+    <button full ion-button color="secondary" [disabled]="!myForm.valid" (click)="saveItem()">Save</button> 
+	</form>
+	</ion-list>
+</ion-content>

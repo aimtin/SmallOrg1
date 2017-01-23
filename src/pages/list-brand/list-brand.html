@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+        Add Brand
+    </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="close()"><ion-icon name="close"></ion-icon></button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+	<ion-item>
+		<ion-label floating primary>Brand</ion-label>
+		<ion-input [(ngModel)]="qpiBrand.brand" formControlName="brand"
+               type="text" id="brand" spellcheck="false" autocapitalize="off">
+		</ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('brand')" danger padding-left>Invalid brand</p>
+	
+    <button full ion-button color="secondary" [disabled]="!myForm.valid" (click)="saveItem()">Save</button> 
+	</form>
+	</ion-list>
+</ion-content>

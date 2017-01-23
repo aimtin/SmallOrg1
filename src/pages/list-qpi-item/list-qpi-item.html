@@ -1,0 +1,52 @@
+<!--
+  Generated template for the List page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{brand}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content>
+  <ion-fab top right edge>
+    <button ion-fab mini color="danger" (click)="addItem()"><ion-icon name="add"></ion-icon></button>
+   </ion-fab>
+<ion-searchbar (ionInput)="getProducts($event)"></ion-searchbar>
+
+	    <button ion-button icon-left>
+		<ion-icon name='funnel'></ion-icon>
+		Filter
+		</button>
+		<button ion-button icon-left>
+		<ion-icon name='restaurant'></ion-icon>
+		sort
+		</button>
+<ion-list>
+    <ion-item-sliding *ngFor="let qpiItem of qpiItems; let i = index" #slidingItem>
+	<ion-item (click)="viewItem(qpiItem)">
+		<ion-avatar item-left>
+      <img src="img/avatar-cher.png">
+    </ion-avatar>
+
+		<h2  ng-click="showProductInfo(item.p_id,item.p_description,item.p_image_id,item.p_name,item.p_price)" > {{qpiItem.product}} </h2>
+        <p   ng-click="showProductInfo(item.p_id,item.p_description,item.p_image_id,item.p_name,item.p_price)">Price: ${{qpiItem.rate}}</p>
+	
+	</ion-item>
+      <ion-item-options>
+        <button ion-button color="danger" (click)="delete($event, i, qpiItem)">
+          <ion-icon name="trash"></ion-icon>
+          Delete
+        </button>
+        <button  ion-button (click)="edit($event, i, qpiItem, slidingItem)">
+          <ion-icon name="create"></ion-icon>
+          Edit
+        </button>
+      </ion-item-options>	
+	</ion-item-sliding>
+  </ion-list>
+</ion-content>
+

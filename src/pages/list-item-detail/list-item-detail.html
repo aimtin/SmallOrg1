@@ -1,0 +1,55 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{product}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+	<ion-item>
+		<ion-label floating primary>Product</ion-label>
+		<ion-input [(ngModel)]="qpiInfo.product" formControlName="product"
+               type="text" id="product" spellcheck="false" autocapitalize="off">
+		</ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('product')" danger padding-left>Invalid product</p>
+	
+	<ion-item>
+		<ion-label floating primary>Descriptions</ion-label>
+		<ion-textarea [(ngModel)]="qpiInfo.descriptions" formControlName="descriptions" type="text"
+                   id="descriptions" spellcheck="false" autocapitalize="off">
+		</ion-textarea>
+	</ion-item>
+    <p *ngIf="!isValid('descriptions')" danger padding-left>Invalid descriptions</p>
+	  
+	<ion-item>
+		<ion-label floating primary>QTY</ion-label>
+		<ion-input [(ngModel)]="qpiInfo.qty" formControlName="qty"
+               type="number" id="qty" spellcheck="false" autocapitalize="off">
+		</ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('qty')" danger padding-left>Invalid QTY</p>
+	
+	<ion-item>
+		<ion-label floating primary>Rate</ion-label>
+		<ion-input [(ngModel)]="qpiInfo.rate" formControlName="rate"
+               type="number" id="rate" spellcheck="false" autocapitalize="off">
+		</ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('rate')" danger padding-left>Invalid Rate</p>
+
+		<ion-item>
+		<ion-label floating primary>Amount</ion-label>
+		<ion-input [(ngModel)]="qpiInfo.amount" formControlName="amount"
+               type="number" id="amount" spellcheck="false" autocapitalize="off">
+		</ion-input>
+    </ion-item>
+    <p *ngIf="!isValid('amount')" danger padding-left>Invalid Amount</p>
+	
+    <button full ion-button color="secondary" [disabled]="!myForm.valid" (click)="saveItem()">Save</button> 
+	</form>
+	</ion-list>
+</ion-content>
