@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-navbar no-border-bottom color="primary">
+    <ion-title>Organisation Setting</ion-title>
+    <ion-buttons end>
+      <button ion-button *ngIf="!internetConnected" (click)="notify('Working offline..')">
+        <ion-icon name="warning"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-fab top right edge>
+    <button ion-fab color="danger" (click)="createOrg()" *ngIf="internetConnected">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <div *ngIf="loading">
+    <img src="assets/images/ring.gif" style="display:block; margin:auto" />
+  </div>
+
+  <ion-list *ngIf="!loading">
+    <forum-org *ngFor="let org of orgs" [org]="org" ></forum-org>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="fetchNextOrgs($event)" threshold="10px" *ngIf="(start > 0) && (queryText.trim().length == 0) && internetConnected">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

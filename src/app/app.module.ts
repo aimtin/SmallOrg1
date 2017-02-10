@@ -1,67 +1,56 @@
-import { NgModule, ErrorHandler } from '@angular/core';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { IonicApp, IonicModule } from 'ionic-angular';
+import { SmallOrgApp } from './app.component';
+//Pages
+import { LoginPage } from '../pages/login/login';
+import { ProfilePage } from '../pages/profile/profile';
+import { SignupPage } from '../pages/signup/signup';
 import { MenuPagePage } from '../pages/menu-page/menu-page';
-import { OrgSettingsPage } from '../pages/org-settings/org-settings';
-import { QpiItemSettingsPage } from '../pages/qpi-item-settings/qpi-item-settings';
-import { QuotationPage } from '../pages/quotation/quotation';
-import { PoPage } from '../pages/po/po';
-import { TaxPage } from '../pages/tax/tax';
-import { ListBrandPage } from '../pages/list-brand/list-brand';
-import { ListQpiItemPage } from '../pages/list-qpi-item/list-qpi-item';
-import { ListItemPage } from '../pages/list-item/list-item';
-import { ListItemDetailPage } from '../pages/list-item-detail/list-item-detail';
-import { ListOrgPage } from '../pages/list-org/list-org';
-import { ListOrgDetailPage } from '../pages/list-org-detail/list-org-detail';
-import { QuotationCartPage } from '../pages/quotation-cart/quotation-cart';
-import { QuotationCartDetailsPage } from '../pages/quotation-cart-details/quotation-cart-details';
-import { Storage } from '@ionic/storage';
-import { Data } from '../providers/data';
-import { Orgdata } from '../providers/orgdata';
-import { QpiData } from '../providers/qpi-data';
-import { BrandData } from '../providers/brand-data';
-import { QuoData } from '../providers/quo-data';
+import { OrgsPage } from '../pages/orgs/orgs';
+import { OrgCreatePage } from '../pages/org-create/org-create';
+
+//Components
+import { OrgComponent } from '../shared/components/org.component';
+import { OrgAvatarComponent } from '../shared/components/org-avatar.component';
+import { UserAvatarComponent } from '../shared/components/user-avatar.component';
+
+// providers
+import { APP_PROVIDERS } from '../providers/app.providers';
 
 @NgModule({
   declarations: [
-    MyApp,
+    SmallOrgApp,
+    LoginPage,
+    ProfilePage,
+    SignupPage,
     MenuPagePage,
-	OrgSettingsPage,
-    QpiItemSettingsPage,
-    QuotationPage,
-	PoPage,
-	TaxPage,
-	ListItemPage,
-	ListItemDetailPage,
-	ListOrgPage,
-	ListOrgDetailPage,
-	ListBrandPage,
-	ListQpiItemPage,
-	QuotationCartPage,
-	QuotationCartDetailsPage
+    OrgsPage,
+    OrgCreatePage,
+    OrgComponent,
+    OrgAvatarComponent,
+    UserAvatarComponent
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(SmallOrgApp),
+    HttpModule,
+    FormsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    SmallOrgApp,
+    LoginPage,
+    ProfilePage,
+    SignupPage,
     MenuPagePage,
-	OrgSettingsPage,
-    QpiItemSettingsPage,
-    QuotationPage,
-	PoPage,
-	TaxPage,
-	ListItemPage,
-	ListItemDetailPage,
-	ListOrgPage,
-	ListOrgDetailPage,
-	ListBrandPage,
-	ListQpiItemPage,
-	QuotationCartPage,
-	QuotationCartDetailsPage
+    OrgsPage,
+    OrgCreatePage,
+    OrgComponent,
+    OrgAvatarComponent,
+    UserAvatarComponent
   ],
   //providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
-  providers: [Storage, Data, Orgdata, QpiData, BrandData, QuoData]
+  providers: [APP_PROVIDERS]
 })
 export class AppModule {}

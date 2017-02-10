@@ -1,0 +1,35 @@
+<ion-item text-wrap>
+    <ion-card>
+
+        <ion-item class="logo">
+        <forum-org-avatar [org]="org"></forum-org-avatar>
+        </ion-item>
+
+        <ion-card-content text-center>
+            <ion-card-title>
+                {{org.orgName}}
+            </ion-card-title>
+        </ion-card-content>
+
+        <ion-row class="left-border-primary">
+            <ion-col>
+                <ion-buttons start>
+                    <button ion-button icon-right color="royal">
+                        Modify
+                        <ion-icon name="create"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+
+            <ion-col text-center>
+                <ion-buttons end>
+                    <button ion-button icon-right color="danger">
+                        Delete
+                        <ion-icon name="trash"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-col>
+        </ion-row>
+        
+    </ion-card>
+</ion-item>
