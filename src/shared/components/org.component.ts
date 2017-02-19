@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, OnDestroy, Input, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, OnDestroy, Input, Output} from '@angular/core';
+import { Events} from 'ionic-angular';
 
 import { IOrganisations } from '../interfaces';
 import { DataService } from '../services/data.service';
@@ -12,7 +13,8 @@ export class OrgComponent implements OnInit, OnDestroy {
     @Output() onModifyOrgs = new EventEmitter<string>();
     //@Output() onDeleteOrgs = new EventEmitter<string>();
 
-    constructor(private dataService: DataService) { }
+    constructor(private dataService: DataService,
+                public events: Events) { }
 
     ngOnInit() {
         //var self = this;
@@ -41,6 +43,10 @@ export class OrgComponent implements OnInit, OnDestroy {
           
       });
 
+    }
+
+    logoOrg(key: string){
+        this.events.publish('image:created', key);
     }
 
 }

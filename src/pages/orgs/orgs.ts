@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnChanges, OnDestroy} from '@angular/core';
-import { NavController, ModalController, ToastController, Content, Events, LoadingController} from 'ionic-angular';
+import { NavController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
+import { Camera, CameraOptions } from 'ionic-native';
 
 import { IOrganisations } from '../../shared/interfaces';
 import { OrgCreatePage } from '../org-create/org-create';
@@ -36,6 +37,7 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
     public sqliteService: SqliteService,
     public mappingsService: MappingsService,
     public itemsService: ItemsService,
+    public actionSheeCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
     public events: Events) { }
 
@@ -75,6 +77,7 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
     var self = this;
     self.events.subscribe('network:connected', self.networkConnected);
     self.events.subscribe('orgs:add', self.addNewOrgs);
+    self.events.subscribe('image:created', self.orgImageUpload);
     console.log('Org Page : loadOrgPage ');
     self.checkFirebase();
   }
@@ -288,5 +291,130 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
         this.notify('Network not found..');
       }
     }
+
+    public orgImageUpload = (key) => {
+      console.log('Image uploaded'+ key);
+      var self = this;
+      self.openImageOptions(key);
+    }
+
+    openImageOptions(key: string) {
+    var self = this;
+
+    let actionSheet = self.actionSheeCtrl.create({
+      title: 'Upload new image from',
+      buttons: [
+        {
+          text: 'Camera',
+          icon: 'camera',
+          handler: () => {
+            self.openCamera(Camera.PictureSourceType.CAMERA, key);
+          }
+        },
+        {
+          text: 'Album',
+          icon: 'folder-open',
+          handler: () => {
+            self.openCamera(Camera.PictureSourceType.PHOTOLIBRARY, key);
+          }
+        }
+      ]
+    });
+
+    actionSheet.present();
+  }
+
+  openCamera(pictureSourceType: any, key: string) {
+    var self = this;
+
+    let options: CameraOptions = {
+      quality: 95,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: pictureSourceType,
+      encodingType: Camera.EncodingType.PNG,
+      targetWidth: 400,
+      targetHeight: 400,
+      saveToPhotoAlbum: true,
+      correctOrientation: true
+    };
+
+    Camera.getPicture(options).then(imageData => {
+      const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+        const byteCharacters = atob(b64Data);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+          const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray = new Uint8Array(byteNumbers);
+
+          byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: contentType });
+        return blob;
+      };
+
+      let capturedImage: Blob = b64toBlob(imageData, 'image/png');
+      self.startUploading(capturedImage, key);
+    }, error => {
+      console.log('ERROR -> ' + JSON.stringify(error));
+    });
+  }
+    startUploading(file, key: string) {
+
+    let self = this;
+    let uid = self.authService.getLoggedInUser().uid;
+    let progress: number = 0;
+    // display loader
+    let loader = this.loadingCtrl.create({
+      content: 'Uploading image..',
+    });
+    loader.present();
+
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    var metadata = {
+      contentType: 'image/png',
+      name: 'org.png',
+      cacheControl: 'no-cache',
+    };
+
+    var uploadTask = self.dataService.getStorageRef().child('images/organisations/' + key + '/org.png').put(file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on('state_changed',
+      function (snapshot) {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      }, function (error) {
+        loader.dismiss().then(() => {
+          switch (error.code) {
+            case 'storage/unauthorized':
+              // User doesn't have permission to access the object
+              break;
+
+            case 'storage/canceled':
+              // User canceled the upload
+              break;
+
+            case 'storage/unknown':
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+          }
+        });
+      }, function () {
+        loader.dismiss().then(() => {
+          // Upload completed successfully, now we can get the download URL
+          var downloadURL = uploadTask.snapshot.downloadURL;
+          self.dataService.setOrgImage(key,true);
+          self.loadOrgs();
+        });
+      });
+  }
 
 }
