@@ -3,6 +3,7 @@ export interface IOrganisations {
     orgName: string;
     address: string;
     email: string;
+    status: string;
     user: IUser;
 }
 

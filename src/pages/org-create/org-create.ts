@@ -26,6 +26,7 @@ export class OrgCreatePage implements OnInit {
 
   ngOnInit() {
     console.log('in org create..');
+
     this.createOrgForm = this.fb.group({
       'name': ['', Validators.compose([Validators.required, Validators.minLength(8)])],
       'address': ['', Validators.compose([Validators.required, Validators.minLength(10)])],
@@ -56,25 +57,21 @@ export class OrgCreatePage implements OnInit {
       self.dataService.getUsername(uid).then(function (snapshot) {
         let username = snapshot.val();
 
-        self.dataService.getTotalOrgs().then(function (snapshot) {
-          let currentNumber = snapshot.val();
-          let newPriority: number = currentNumber === null ? 1 : (currentNumber + 1);
-
           let newOrg: IOrganisations = {
             key: null,
             orgName: org.name,
             address: org.address,
             email: org.email,
+            status: 'created',
             user: { uid: uid, username: username }
           };
 
-          self.dataService.submitOrg(newOrg, newPriority)
+          self.dataService.submitOrg(newOrg)
             .then(function (snapshot) {
               loader.dismiss()
                 .then(() => {
                   self.viewCtrl.dismiss({
-                    org: newOrg,
-                    priority: newPriority
+                    org: newOrg
                   });
                 });
             }, function (error) {
@@ -82,8 +79,6 @@ export class OrgCreatePage implements OnInit {
               console.error(error);
               loader.dismiss();
             });
-
-        });
       });
     }
   }

@@ -9,19 +9,38 @@ import { DataService } from '../services/data.service';
 })
 export class OrgComponent implements OnInit, OnDestroy {
     @Input() org: IOrganisations;
-    // @Output() onViewComments = new EventEmitter<string>();
+    @Output() onModifyOrgs = new EventEmitter<string>();
+    //@Output() onDeleteOrgs = new EventEmitter<string>();
 
     constructor(private dataService: DataService) { }
 
     ngOnInit() {
-        var self = this;
+        //var self = this;
         //self.dataService.getOrgsRef().child(self.org.key).on('child_changed', self.onCommentAdded);
     }
 
     ngOnDestroy() {
          console.log('destroying..');
-        var self = this;
+        //var self = this;
         //self.dataService.getOrgsRef().child(self.org.key).off('child_changed', self.onCommentAdded);
+    }
+
+    modifyOrg(key: string) {
+        console.log('modifyOrg : ' + key);
+ 
+        this.onModifyOrgs.emit(key);
+        
+    }
+
+    deleteOrg(key: string) {
+      var self = this;
+
+        console.log('deleteOrg : ' + key);
+
+        self.dataService.deleteOrg(key).then(function (snapshot) {
+          
+      });
+
     }
 
 }

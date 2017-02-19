@@ -10,6 +10,7 @@ import { SignupPage } from '../pages/signup/signup';
 import { MenuPagePage } from '../pages/menu-page/menu-page';
 import { OrgsPage } from '../pages/orgs/orgs';
 import { OrgCreatePage } from '../pages/org-create/org-create';
+import { OrgModifyPage } from '../pages/org-modify/org-modify';
 
 //Components
 import { OrgComponent } from '../shared/components/org.component';
@@ -28,6 +29,7 @@ import { APP_PROVIDERS } from '../providers/app.providers';
     MenuPagePage,
     OrgsPage,
     OrgCreatePage,
+    OrgModifyPage,
     OrgComponent,
     OrgAvatarComponent,
     UserAvatarComponent
@@ -46,6 +48,7 @@ import { APP_PROVIDERS } from '../providers/app.providers';
     MenuPagePage,
     OrgsPage,
     OrgCreatePage,
+    OrgModifyPage,
     OrgComponent,
     OrgAvatarComponent,
     UserAvatarComponent

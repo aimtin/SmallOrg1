@@ -25,11 +25,24 @@ export class OrgAvatarComponent implements OnInit {
             self.imageLoaded = true;
         } else {
             console.log('Org Avatar : firebaseConnected ');
-            self.dataService.getStorageRef().child('images/organisations/' + self.org.key + '/org.png').getDownloadURL().then(function (url) {
-                console.log('Org Avatar : firebaseConnected ' + url);
-                self.imageUrl = url.split('?')[0] + '?alt=media' + '&t=' + (new Date().getTime());
-                self.imageLoaded = true;
+            self.dataService.getOrgsRef().child(self.org.key).once('value').then(function(snapshot) {
+                var image = snapshot.val().image;
+                if (image) {
+                    self.dataService.getStorageRef().child('images/organisations/' + self.org.key + '/org.png').getDownloadURL().then(function (url) {
+                        console.log('Org Avatar : firebaseConnected ' + url);
+                        self.imageUrl = url.split('?')[0] + '?alt=media' + '&t=' + (new Date().getTime());
+                        self.imageLoaded = true;
+                    });
+                }else {
+                    self.dataService.getStorageRef().child('images/organisations/default/org.png').getDownloadURL().then(function (url) {
+                        console.log('Org Avatar : firebaseConnected ' + url);
+                        self.imageUrl = url.split('?')[0] + '?alt=media' + '&t=' + (new Date().getTime());
+                        self.imageLoaded = true;
+                    });
+                }
+  
             });
+            
         }
         
     }

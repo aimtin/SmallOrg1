@@ -9,12 +9,18 @@
             <ion-card-title>
                 {{org.orgName}}
             </ion-card-title>
+            <ion-buttons >
+                    <button ion-button icon-right clear small color="green" (click)="logoOrg(org.key)">
+                        Upload Logo
+                        <ion-icon name="images"></ion-icon>
+            </button>
+        </ion-buttons>
         </ion-card-content>
 
         <ion-row class="left-border-primary">
             <ion-col>
                 <ion-buttons start>
-                    <button ion-button icon-right color="royal">
+                    <button ion-button icon-right small color="royal" (click)="modifyOrg(org.key)">
                         Modify
                         <ion-icon name="create"></ion-icon>
                     </button>
@@ -23,7 +29,7 @@
 
             <ion-col text-center>
                 <ion-buttons end>
-                    <button ion-button icon-right color="danger">
+                    <button ion-button icon-right small color="danger" (click)="deleteOrg(org.key)">
                         Delete
                         <ion-icon name="trash"></ion-icon>
                     </button>

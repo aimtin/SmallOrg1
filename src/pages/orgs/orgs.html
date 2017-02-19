@@ -24,10 +24,7 @@
   </div>
 
   <ion-list *ngIf="!loading">
-    <forum-org *ngFor="let org of orgs" [org]="org" ></forum-org>
+    <forum-org *ngFor="let org of orgs" [org]="org" (onModifyOrgs)="modifyOrg($event)"></forum-org>
   </ion-list>
 
-  <ion-infinite-scroll (ionInfinite)="fetchNextOrgs($event)" threshold="10px" *ngIf="(start > 0) && (queryText.trim().length == 0) && internetConnected">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-</ion-content>
+ </ion-content>

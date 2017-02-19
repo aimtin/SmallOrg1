@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, OnDestroy} from '@angular/core';
 import { NavController, ModalController, ToastController, Content, Events, LoadingController} from 'ionic-angular';
 
 import { IOrganisations } from '../../shared/interfaces';
 import { OrgCreatePage } from '../org-create/org-create';
+import { OrgModifyPage } from '../org-modify/org-modify';
 
 import { AuthService } from '../../shared/services/auth.service';
 import { DataService } from '../../shared/services/data.service';
@@ -13,14 +14,15 @@ import { SqliteService } from '../../shared/services/sqlite.service';
 @Component({
   templateUrl: 'orgs.html'
 })
-export class OrgsPage implements OnInit {
+export class OrgsPage implements OnInit, OnChanges, OnDestroy {
   @ViewChild(Content) content: Content;
   queryText: string = '';
   public start: number;
+  segment: string = 'all';
   public pageSize: number = 3;
   public loading: boolean = true;
   public internetConnected: boolean = true;
-
+  public refreshFlag: boolean = true;
   public orgs: Array<IOrganisations> = [];
   public newOrgs: Array<IOrganisations> = [];
   
@@ -38,9 +40,36 @@ export class OrgsPage implements OnInit {
     public events: Events) { }
 
   ngOnInit() {
+    console.log('Org Page : ngOnInit ');
     this.loadOrgPage();
   }
 
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad Page');
+
+  }
+  public ngOnChanges(changes) {
+    console.log('list changed', changes);
+  }
+
+  public ngOnDestroy(){
+    console.log('list destroyed');
+    this.dataService.getOrgsRef().orderByChild('user/uid').equalTo(this.authService.getLoggedInUser().uid).off('child_removed');
+    this.dataService.getOrgsRef().orderByChild('user/uid').equalTo(this.authService.getLoggedInUser().uid).off('child_added');
+  }
+
+  ionViewWillEnter() {
+    console.log('ionViewWillEnter page.');
+    if (this.refreshFlag === false){
+      this.refreshFlag = true;
+      this.loadOrgs();
+    }
+    
+  }
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave page.');
+    this.refreshFlag = false;
+  }
   loadOrgPage()
   {
     var self = this;
@@ -67,11 +96,12 @@ export class OrgsPage implements OnInit {
       }, 1000);
     } else {
       console.log('Firebase connection found (orgs.ts) - attempt: ' + self.firebaseConnectionAttempts);
-      self.dataService.getStatisticsRef().on('child_changed', self.onOrgAdded);
+      self.dataService.getOrgsRef().orderByChild('user/uid').equalTo(self.authService.getLoggedInUser().uid).on('child_removed', self.onChangeReload);
+      self.dataService.getOrgsRef().orderByChild('user/uid').equalTo(self.authService.getLoggedInUser().uid).on('child_added', self.onOrgAdded);
       if (self.authService.getLoggedInUser() === null) {
         //
       } else {
-        self.loadOrgs(true);
+        self.loadOrgs();
       }
     }
   }
@@ -93,6 +123,7 @@ export class OrgsPage implements OnInit {
             orgName: data.rows.item(i).orgName,
             address: data.rows.item(i).address,
             email: data.rows.item(i).email,
+            status: data.rows.item(i).status,
             user: { uid: data.rows.item(i).user, username: data.rows.item(i).username }
           };
 
@@ -116,7 +147,7 @@ export class OrgsPage implements OnInit {
 
     if (self.internetConnected) {
       self.orgs = [];
-      self.loadOrgs(true);
+      self.loadOrgs();
     } else {
       self.notify('Connection lost. Working offline..');
       // save current orgs..
@@ -128,20 +159,53 @@ export class OrgsPage implements OnInit {
     }
   }
 
+    public onChangeReload = (childSnapshot, prevChildKey) => {
+      console.log('Org Page : onChangeReload ');
+      var self = this;
+      /*let key = childSnapshot.key;
+      self.loading = true;
+      let tempOrgs: Array<IOrganisations> = [];
+      tempOrgs = self.orgs;
+      let newOrg: IOrganisations = self.mappingsService.getOrg(childSnapshot.val(), key);
+      let index: number = 0;
+      self.orgs = [];
+      tempOrgs.forEach(function (org: IOrganisations) {
+        index += 1;
+        if (newOrg.key === org.key){
+          console.log('inderOf :' + index);
+          console.log('org.key :' + org.key);
+          console.log('newOrg.key :' + newOrg.key);
+          tempOrgs.splice( index, 1 );
+        }else {
+            self.orgs.push(org);
+        }
+        
+      });
+      
+      self.events.publish('orgs:viewed');
+      self.loading = false;*/
+      self.loadOrgs();
+    }
+
   // Notice function declarion to keep the right this reference
   public onOrgAdded = (childSnapshot, prevChildKey) => {
-    console.log('Org Page : onOrgAdded ');
-    let priority = childSnapshot.val(); // priority..
-    var self = this;
-    self.events.publish('org:created');
-    // fetch new org..
-    self.dataService.getOrgsRef().orderByPriority().equalTo(priority).once('value').then(function (dataSnapshot) {
-      let key = Object.keys(dataSnapshot.val())[0];
-      let newOrg: IOrganisations = self.mappingsService.getOrg(dataSnapshot.val()[key], key);
-      self.newOrgs.push(newOrg);
-      self.CreateAndUploadDefaultImage(newOrg);
-      
-    });
+      console.log('Org Page : onOrgAdded ');
+      var self = this;
+      self.dataService.getOrgsRef().child(childSnapshot.key).once('value').then(function(snapshot) {
+        var status = snapshot.val().status;
+        if (status === 'added') {
+          console.log('ignore Org : status ' + status);
+        } else {
+          console.log('Add Org : status ' + status);
+          self.events.publish('org:created');
+          let key = childSnapshot.key;
+          let newOrg: IOrganisations = self.mappingsService.getOrg(childSnapshot.val(), key);
+          console.log('onOrgAdded : ' + newOrg.orgName);
+          self.dataService.setOrgImage(key, false);
+          self.dataService.setOrgStatus(key, 'added');
+          self.loadOrgs();
+        }
+      });
   }
 
   public addNewOrgs = () => {
@@ -154,39 +218,26 @@ export class OrgsPage implements OnInit {
     self.newOrgs = [];
     
     self.events.publish('orgs:viewed');
-    self.scrollToTop();
-    //self.loadOrgs(true);
-    
   }
 
-  loadOrgs(fromStart: boolean) {
+  loadOrgs() {
     console.log('Org Page : loadOrgs ');
     var self = this;
-
-    if (fromStart) {
-      self.loading = true;
+    self.loading = true;
       self.orgs = [];
       self.newOrgs = [];
-      this.dataService.getTotalOrgs().then(function (snapshot) {
-          self.start = snapshot.val();
-          self.getOrgs();
-        });
-    } else {
       self.getOrgs();
-    }
   }
 
   getOrgs() {
     console.log('Org Page : getOrgs ');
     var self = this;
-    let startFrom: number = self.start - self.pageSize;
-    if (startFrom < 0)
-      startFrom = 0;
-      this.dataService.getOrgsRef().orderByPriority().startAt(startFrom).endAt(self.start).once('value', function (snapshot) {
+    self.orgs = [];
+    self.dataService.getUserOrgs(self.authService.getLoggedInUser().uid)
+    .then(function (snapshot) {
         self.itemsService.reversedItems<IOrganisations>(self.mappingsService.getOrgs(snapshot)).forEach(function (org) {
           self.orgs.push(org);
         });
-        self.start -= (self.pageSize + 1);
         self.events.publish('orgs:viewed');
         self.loading = false;
       });
@@ -196,6 +247,7 @@ export class OrgsPage implements OnInit {
   createOrg() {
     console.log('Org Page : createOrg ');
     var self = this;
+    
     let modalPage = this.modalCtrl.create(OrgCreatePage);
 
     modalPage.onDidDismiss((data: any) => {
@@ -207,33 +259,13 @@ export class OrgsPage implements OnInit {
         });
         toast.present();
 
-        if (data.priority === 1)
-          self.newOrgs.push(data.org);
-
-        //self.addNewOrgs();
       }
     });
 
     modalPage.present();
+    
   }
 
-  fetchNextOrgs(infiniteScroll) {
-    console.log('Org Page : fetchNextOrgs ');
-    if (this.start > 0 && this.internetConnected) {
-      this.loadOrgs(false);
-      infiniteScroll.complete();
-    } else {
-      infiniteScroll.complete();
-    }
-  }
-
-  scrollToTop() {
-    console.log('Org Page : scrollToTop ');
-    var self = this;
-    setTimeout(function () {
-      self.content.scrollToTop();
-    }, 1500);
-  }
 
   notify(message: string) {
     console.log('Org Page : notify ');
@@ -245,78 +277,16 @@ export class OrgsPage implements OnInit {
     toast.present();
   }
 
-      CreateAndUploadDefaultImage(org) {
-        console.log('Org Page : CreateAndUploadDefaultImage ');
-        let self = this;
-        let imageData = 'assets/images/org.png';
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', imageData, true);
-        xhr.responseType = 'blob';
-        xhr.onload = function (e) {
-            if (this.status === 200) {
-                var myBlob = this.response;
-                // myBlob is now the blob that the object URL pointed to.
-                self.startUploading(myBlob,org);
-            }
-        };
-        xhr.send();
-    }
-
-    startUploading(file,org) {
-        let promise = new Promise((res,rej) => { 
-        console.log('Org Page : startUploading ');
-        let self = this;
-        let key = org.key;
-        let progress: number = 0;
-        // display loader
-        let loader = this.loadingCtrl.create({
-            content: 'Uploading default image..',
+    modifyOrg(key: string) {
+      console.log('Modify org: ' + key);
+      if (this.internetConnected) {
+        this.navCtrl.push(OrgModifyPage, {
+          orgKey: key
         });
-        loader.present();
-
-        // Upload file and metadata to the object 'images/mountains.jpg'
-        var metadata = {
-            contentType: 'image/png',
-            name: 'org.png',
-            cacheControl: 'no-cache',
-        };
-
-        var uploadTask = self.dataService.getStorageRef().child('images/organisations/' + key + '/org.png').put(file, metadata);
-
-        // Listen for state changes, errors, and completion of the upload.
-        uploadTask.on('state_changed',
-            function (snapshot) {
-                console.log('Org Page : uploadTask ');
-                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            }, function (error) {
-                loader.dismiss().then(() => {
-                    switch (error.code) {
-                        case 'storage/unauthorized':
-                            // User doesn't have permission to access the object
-                            break;
-
-                        case 'storage/canceled':
-                            // User canceled the upload
-                            break;
-
-                        case 'storage/unknown':
-                            // Unknown error occurred, inspect error.serverResponse
-                            break;
-                    }
-                });
-            }, function () {
-                loader.dismiss().then(() => {
-                    console.log('Org Page : uploadTask end');
-                    // Upload completed successfully, now we can get the download URL
-                    var downloadURL = uploadTask.snapshot.downloadURL;
-                    self.dataService.setOrgImage(key);
-                    self.addNewOrgs();
-                });
-            });
-        });
-        return promise;
+      } else {
+        this.notify('Network not found..');
+      }
     }
 
 }

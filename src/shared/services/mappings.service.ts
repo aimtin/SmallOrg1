@@ -22,6 +22,7 @@ export class MappingsService {
                 orgName: org.orgName,
                 address: org.address,
                 email: org.email,
+                status: org.status,
                 user: { uid: org.user.uid, username: org.user.username }
             });
         });
@@ -36,6 +37,7 @@ export class MappingsService {
             orgName: snapshot.orgName,
             address: snapshot.address,
             email: snapshot.email,
+            status: snapshot.status,
             user: snapshot.user
         };
 

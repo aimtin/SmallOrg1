@@ -11,7 +11,6 @@ export class DataService {
     usersRef: any = firebase.database().ref('users');
     orgsRef: any = firebase.database().ref('organisations');
     productsRef: any = firebase.database().ref('products');
-    statisticsRef: any = firebase.database().ref('statistics');
     storageRef: any = firebase.storage().ref();
     connectionRef: any = firebase.database().ref('.info/connected');
 
@@ -22,11 +21,6 @@ export class DataService {
         var self = this;
         try {
             self.checkFirebaseConnection();
-            /*
-            self.storageRef.child('images/default/profile.png').getDownloadURL().then(function (url) {
-                self.defaultImageUrl = url.split('?')[0] + '?alt=media';
-            });
-            */
             self.InitData();
         } catch (error) {
             console.log('Data Service error:' + error);
@@ -57,8 +51,8 @@ export class DataService {
     }
 
     private InitData() {
-        let self = this;
-        // Set statistics/orgs = 1 for the first time only
+        /*let self = this;
+        
         self.getStatisticsRef().child('orgs').transaction(function (currentRank) {
             if (currentRank === null) {
                 return 1;
@@ -73,7 +67,7 @@ export class DataService {
 
             }
             console.log('commited', snapshot.val());
-        }, false);
+        }, false);*/
     }
 
     getDatabaseRef() {
@@ -112,22 +106,42 @@ export class DataService {
         return this.storageRef;
     }
 
-    /*getThreadProductsRef(threadKey: string) {
-        return this.productsRef.orderByChild('thread').equalTo(threadKey);
-    }*/
-
     loadOrgs() {
         return this.orgsRef.once('value');
     }
 
-    submitOrg(org: IOrganisations, priority: number) {
+    submitOrg(org: IOrganisations) {
 
         var newOrgRef = this.orgsRef.push();
-        this.statisticsRef.child('orgs').set(priority);
-        console.log(priority);
-        return newOrgRef.setWithPriority(org, priority);
+        return newOrgRef.set(org);
     }
 
+    updateOrg(key: string, org: any) {
+        this.orgsRef.child(key).update({
+            orgName: org.name,
+            address: org.address,
+            email: org.email
+        });
+    }
+
+    deleteOrg(key: string) {
+        var self = this;
+        
+        return self.orgsRef.child(key).once('value').then(function(snapshot) {
+            var image = snapshot.val().image;
+            if (image) {
+                var desertRef = self.storageRef.child('images/organisations/' + key + '/org.png');
+                desertRef.delete().then(function() {
+                    console.log('File deleted successfully');
+            
+                }).catch(function(error) {
+                    console.log('An error occurred!'); 
+            
+                });
+            }
+            self.orgsRef.child(key).remove();
+        });
+    }
 
     setUserImage(uid: string) {
         this.usersRef.child(uid).update({
@@ -135,33 +149,18 @@ export class DataService {
         });
     }
 
-    setOrgImage(key: string) {
+    setOrgImage(key: string, flag: boolean) {
         this.orgsRef.child(key).update({
-            image: true
+            image: flag
         });
     }
-    
+    setOrgStatus(key: string, status: string) {
+        this.orgsRef.child(key).update({
+            status: status
+        });
+    }
     loadProducts(orgKey: string) {
         return this.productsRef.orderByChild('productName').equalTo(orgKey).once('value');
-    }
-
-    /*submitComment(threadKey: string, comment: IComment) {
-        // let commentRef = this.productsRef.push();
-        // let commentkey: string = commentRef.key;
-        this.productsRef.child(comment.key).set(comment);
-
-        return this.orgsRef.child(threadKey + '/comments').once('value')
-            .then((snapshot) => {
-                let numberOfComments = snapshot == null ? 0 : snapshot.val();
-                this.orgsRef.child(threadKey + '/comments').set(numberOfComments + 1);
-            });
-    }*/
-
-    getTotalOrgs() {
-        return this.statisticsRef.child('orgs').once('value');
-    }
-    getStatisticsRef() {
-        return this.statisticsRef;
     }
 
     getUsername(userUid: string) {
@@ -175,7 +174,9 @@ export class DataService {
     getUserOrgs(userUid: string) {
         return this.orgsRef.orderByChild('user/uid').equalTo(userUid).once('value');
     }
-
+    getOrg(key: string) {
+        return this.orgsRef.child(key).once('value');
+    }
     getUserProducts(userUid: string) {
         return this.productsRef.orderByChild('user/uid').equalTo(userUid).once('value');
     }
