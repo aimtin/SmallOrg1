@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Platform, NavController, MenuController , NavParams, Events} from 'ionic-angular';
 //import { Platform, Nav } from 'ionic-angular';
 import { OrgsPage } from '../orgs/orgs';
+import { QpiItemSettingsPage } from '../qpi-item-settings/qpi-item-settings';
+import { QuotationPage } from '../quotation/quotation';
+import { PoPage } from '../po/po';
+import { TaxPage } from '../tax/tax';
 
 import { AuthService } from '../../shared/services/auth.service';
 import { DataService } from '../../shared/services/data.service';
@@ -13,7 +17,7 @@ import { DataService } from '../../shared/services/data.service';
 export class MenuPagePage implements OnInit{
 	//@ViewChild('myNav') nav: Nav;
 	//rootPage: any = OrgSettingsPage;
-	pages: Array<{title: string, component: any}>;
+	pages: Array<{title: string, component: any, icon: string, color: string}>;
 	constructor(
 	public authService: AuthService,
 	public dataService: DataService,
@@ -25,11 +29,11 @@ export class MenuPagePage implements OnInit{
 
 		// set our app's pages
 		this.pages = [
-			{ title: 'Organisation Settings', component: OrgsPage }
-			//{ title: 'QPI Item Settings', component: QpiItemSettingsPage },
-			//{ title: 'Quotation', component: QuotationPage },
-			//{ title: 'PO', component: PoPage },
-			//{ title: 'Tax', component: TaxPage }
+			{ title: 'Organisation Settings', component: OrgsPage, icon: 'cog', color: 'secondary'},
+			{ title: 'QPI Item Settings', component: QpiItemSettingsPage, icon: 'settings', color: 'danger'},
+			{ title: 'Quotation', component: QuotationPage, icon: 'clipboard', color: 'light'},
+			{ title: 'PO', component: PoPage, icon: 'paper', color: 'dark'},
+			{ title: 'Tax', component: TaxPage, icon: 'logo-usd', color: 'primary' }
 		];
 	}
 	ngOnInit() {

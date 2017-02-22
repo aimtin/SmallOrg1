@@ -9,15 +9,15 @@
     <button ion-button menuToggle>
       <ion-icon name='menu'></ion-icon>
     </button>
-    <ion-title>Menu Page</ion-title>
+    <ion-title>Wintechies</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 <ion-content padding class="list">
   <ion-list>
-    <button ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-left>
-      <ion-icon [name]="'logo-' + p.icon" [ngStyle]="{'color': p.color}" item-left></ion-icon>
+    <button ion-item *ngFor="let p of pages" (click)="openPage(p)"  icon-left>
+      <ion-icon [name]="p.icon" [color]="p.color" item-left></ion-icon>
       {{p.title}}
     </button>
   </ion-list>

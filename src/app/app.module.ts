@@ -8,6 +8,11 @@ import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { SignupPage } from '../pages/signup/signup';
 import { MenuPagePage } from '../pages/menu-page/menu-page';
+import { QpiItemSettingsPage } from '../pages/qpi-item-settings/qpi-item-settings';
+import { QuotationPage } from '../pages/quotation/quotation';
+import { PoPage } from '../pages/po/po';
+import { TaxPage } from '../pages/tax/tax';
+
 import { OrgsPage } from '../pages/orgs/orgs';
 import { OrgCreatePage } from '../pages/org-create/org-create';
 import { OrgModifyPage } from '../pages/org-modify/org-modify';
@@ -27,6 +32,10 @@ import { APP_PROVIDERS } from '../providers/app.providers';
     ProfilePage,
     SignupPage,
     MenuPagePage,
+    QpiItemSettingsPage,
+    QuotationPage,
+    PoPage,
+    TaxPage,
     OrgsPage,
     OrgCreatePage,
     OrgModifyPage,
@@ -46,6 +55,10 @@ import { APP_PROVIDERS } from '../providers/app.providers';
     ProfilePage,
     SignupPage,
     MenuPagePage,
+    QpiItemSettingsPage,
+    QuotationPage,
+    PoPage,
+    TaxPage,
     OrgsPage,
     OrgCreatePage,
     OrgModifyPage,
