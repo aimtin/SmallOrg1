@@ -1,0 +1,47 @@
+<ion-item text-wrap>
+    <ion-card>
+
+        <ion-item class="logo">
+        <forum-product-avatar [product]="product"></forum-product-avatar>
+        </ion-item>
+
+        <ion-card-content text-center>
+            <ion-card-title>
+                {{product.productName}}
+            </ion-card-title>
+            <p>
+                {{product.description}}
+            </p>
+            <div>
+                <p>{{product.qty}} x ${{product.rate}} =
+                    <strong>${{ product.qty *  product.rate }}</strong>
+                </p>
+            </div>
+        </ion-card-content>
+
+        <ion-row no-padding>
+            <ion-col>
+                <button ion-button clear small color="danger" icon-left>
+                    <ion-icon name='trash'></ion-icon>
+                </button>
+            </ion-col>
+
+            <ion-col text-center>
+                <button ion-button clear small icon-left>
+                    <ion-icon name='add'></ion-icon>
+                </button>
+            </ion-col>
+            <ion-col text-right>
+                <button ion-button clear small icon-left>
+                    {{product.qty}}
+                </button>
+            </ion-col>
+            <ion-col text-right>
+                <button ion-button clear small icon-left>
+                    <ion-icon name='remove'></ion-icon>
+                </button>
+            </ion-col>
+    </ion-row>
+        
+    </ion-card>
+</ion-item>

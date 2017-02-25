@@ -1,0 +1,22 @@
+<ion-item>
+    <ion-thumbnail item-left>
+      <forum-product-avatar [product]="product"></forum-product-avatar>
+      <button ion-button clear icon-left small item-right color="secondary" (click)="logoProduct(product.key)">
+        <ion-icon name="images"></ion-icon>
+        upload
+    </button>
+    </ion-thumbnail>
+    <h2>{{product.productName}}</h2>
+    <p>{{product.brand}}</p>
+    <span>
+    <button ion-button icon-right item-left small color="royal" (click)="modifyProduct(product.key)">
+        Modify
+        <ion-icon name="create"></ion-icon>
+    </button>
+
+    <button ion-button icon-right item-left small color="danger" (click)="deleteProduct(product.key)">
+        Delete
+        <ion-icon name="trash"></ion-icon>
+    </button>
+    </span>
+</ion-item>

@@ -52,19 +52,19 @@ export class MappingsService {
         let list = snapshot.val();
 
         Object.keys(snapshot.val()).map((key: any) => {
-            let products: any = list[key];
+            let product: any = list[key];
 
             products.push({
                 key: key,
-                productName: products.productName,
-                brand: products.brand,
-                description: products.description,
-                qty: products.qty,
-                rate: products.rate,
-                amount: products.amount,
-                subject: products.subject,
-                orgName: products.orgName,
-                user: { uid: products.user.uid, username: products.user.username }
+                productName: product.productName,
+                brand: product.brand,
+                orgKey: product.key,
+                description: product.description,
+                qty: product.qty,
+                rate: product.rate,
+                amount: product.amount,
+                subject: product.subject,
+                user: { uid: product.user.uid, username: product.user.username }
             });
         });
 
@@ -72,24 +72,18 @@ export class MappingsService {
     }
 
     getProduct(snapshot: any, productKey: string): IProducts {
-        let product: IProducts;
 
-        if (snapshot.val() == null)
-            return null;
-
-        let snapshotProduct = snapshot.val();
-        console.log(snapshotProduct);
-        product = {
+        let product: IProducts = {
             key: productKey,
-            productName: snapshotProduct.productName,
-            brand: snapshotProduct.brand,
-            description: snapshotProduct.description,
-            qty: snapshotProduct.qty,
-            rate: snapshotProduct.rate,
-            amount: snapshotProduct.amount,
-            subject: snapshotProduct.subject,
-            orgName: snapshotProduct.orgName,
-            user: snapshotProduct.user
+            productName: snapshot.productName,
+            brand: snapshot.brand,
+            orgKey: snapshot.key,
+            description: snapshot.description,
+            qty: snapshot.qty,
+            rate: snapshot.rate,
+            amount: snapshot.amount,
+            subject: snapshot.subject,
+            user: snapshot.user
         };
 
         return product;

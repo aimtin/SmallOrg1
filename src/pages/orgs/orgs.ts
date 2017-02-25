@@ -76,7 +76,6 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
   {
     var self = this;
     self.events.subscribe('network:connected', self.networkConnected);
-    self.events.subscribe('orgs:add', self.addNewOrgs);
     self.events.subscribe('image:created', self.orgImageUpload);
     console.log('Org Page : loadOrgPage ');
     self.checkFirebase();
@@ -209,18 +208,6 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
           self.loadOrgs();
         }
       });
-  }
-
-  public addNewOrgs = () => {
-    console.log('Org Page : addNewOrgs ');
-    var self = this;
-    self.newOrgs.forEach(function (org: IOrganisations) {
-      self.orgs.unshift(org);
-    });
-
-    self.newOrgs = [];
-    
-    self.events.publish('orgs:viewed');
   }
 
   loadOrgs() {

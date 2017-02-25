@@ -1,0 +1,40 @@
+<ion-header>
+
+  <ion-navbar no-border-bottom color="primary">
+    <ion-title>Quotation Cart</ion-title>
+    <ion-buttons end>
+      <button ion-button *ngIf="!internetConnected" (click)="notify('Working offline..')">
+        <ion-icon name="warning"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  	<div *ngIf="loading">
+    	<img src="assets/images/ring.gif" style="display:block; margin:auto" />
+  	</div>
+  	<div>
+        <p>Total ( {{ total_qty }} ) =
+            <strong>${{total_amount}}</strong>
+        </p>
+    </div>
+  	<ion-list *ngIf="!loading">
+    	<forum-quotation *ngFor="let product of products" [product]="product" (onDeleteProducts)="deleteProduct($event)"></forum-quotation>
+  	</ion-list>
+
+ </ion-content>
+
+<ion-footer >
+  	<ion-toolbar color="primary">
+  		
+    	<ion-buttons end>
+      		<button ion-button icon-right >
+        		Send
+        		<ion-icon name="mail"></ion-icon>
+      		</button>
+    	</ion-buttons>
+  	</ion-toolbar>
+</ion-footer>

@@ -1,0 +1,12 @@
+<ion-item>
+    <ion-thumbnail item-left>
+      <forum-product-avatar [product]="product"></forum-product-avatar>
+    </ion-thumbnail>
+    <h2>{{product.productName}}</h2>
+    <p>{{product.brand}}</p>
+    <p>Price: ${{product.rate}}</p>
+    <button ion-button icon-left clear item-right color = "secondary" (click)="addToCart(product)">
+        <ion-icon name="cart"></ion-icon>
+        Add
+    </button>
+</ion-item>

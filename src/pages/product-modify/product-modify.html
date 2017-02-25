@@ -1,0 +1,71 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title>Modify Product</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <form [formGroup]="modifyProductForm" (ngSubmit)="onSubmit(modifyProductForm.value)">
+        <ion-item [class.error]="!name.valid && name.touched">
+            <ion-label floating>Product Name</ion-label>
+            <ion-input type="text" [(ngModel)]="productInfo.name" [formControl]="name"></ion-input>
+        </ion-item>
+        <div *ngIf="name.hasError('required') && name.touched" class="error-box">* Product Name is required.</div>
+        <div *ngIf="name.hasError('minlength') && name.touched" class="error-box">* Minimum Name length is 2.</div>
+
+        <ion-item [class.error]="!brand.valid && brand.touched">
+            <ion-label floating>Brand Name</ion-label>
+            <ion-input type="text" [(ngModel)]="productInfo.brand" [formControl]="brand"></ion-input>
+        </ion-item>
+        <div *ngIf="brand.hasError('required') && brand.touched" class="error-box">* Brand Name is required.</div>
+        <div *ngIf="brand.hasError('minlength') && brand.touched" class="error-box">* Minimum Name length is 2.</div>
+
+        <ion-item [class.error]="!orgName.valid && orgName.touched">
+            <ion-label floating>Organisation Name</ion-label>
+            <ion-select [(ngModel)]="productInfo.orgName" [formControl]="orgName">
+            	<ion-option *ngFor="let org of orgs">{{org.orgName}}</ion-option>
+  			</ion-select>
+        </ion-item>
+        <div *ngIf="orgName.hasError('required') && orgName.touched" class="error-box">* Organisation Name is required.</div>
+
+        <ion-item [class.error]="!description.valid && description.touched">
+            <ion-label floating>Description</ion-label>
+            <ion-textarea [(ngModel)]="productInfo.description" [formControl]="description" rows="6"></ion-textarea>
+        </ion-item>
+        <div *ngIf="description.hasError('required') && description.touched" class="error-box">* description is required.</div>
+        <div *ngIf="description.hasError('minlength') && description.touched" class="error-box">* Type at least 10 characters.</div>
+
+        <ion-item [class.error]="!qty.valid && qty.touched">
+            <ion-label floating>Qty</ion-label>
+            <ion-input type="number" [(ngModel)]="productInfo.qty" [formControl]="qty"></ion-input>
+        </ion-item>
+        <div *ngIf="qty.hasError('required') && qty.touched" class="error-box">* Qty is required.</div>
+        <div *ngIf="qty.hasError('isValid') && qty.touched" class="error-box">* Enter a valid number.</div>
+
+        <ion-item [class.error]="!rate.valid && rate.touched">
+            <ion-label floating>Rate</ion-label>
+            <ion-input type="number" [(ngModel)]="productInfo.rate" [formControl]="rate"></ion-input>
+        </ion-item>
+        <div *ngIf="rate.hasError('required') && rate.touched" class="error-box">* Rate is required.</div>
+        <div *ngIf="rate.hasError('isValid') && rate.touched" class="error-box">* Enter a valid number.</div>
+
+        <ion-item [class.error]="!amount.valid && amount.touched">
+            <ion-label floating>Amount</ion-label>
+            <ion-input type="number" [(ngModel)]="productInfo.amount" [formControl]="amount"></ion-input>
+        </ion-item>
+        <div *ngIf="amount.hasError('required') && amount.touched" class="error-box">* Amount is required.</div>
+        <div *ngIf="amount.hasError('isValid') && amount.touched" class="error-box">* Enter a valid number.</div>
+
+
+		<ion-item [class.error]="!subject.valid && subject.touched">
+            <ion-label floating>Subject</ion-label>
+            <ion-textarea [(ngModel)]="productInfo.subject" [formControl]="subject" rows="6"></ion-textarea>
+        </ion-item>
+        <div *ngIf="subject.hasError('required') && subject.touched" class="error-box">* Subject is required.</div>
+        <div *ngIf="subject.hasError('minlength') && subject.touched" class="error-box">* Type at least 10 characters.</div>
+
+        <br/><br/>
+        <button ion-button type="submit" class="custom-button" [disabled]="!modifyProductForm.valid" block>Submit</button>
+    </form>
+</ion-content>

@@ -9,12 +9,10 @@
             <ion-card-title>
                 {{org.orgName}}
             </ion-card-title>
-            <ion-buttons >
-                    <button ion-button icon-right clear small color="green" (click)="logoOrg(org.key)">
-                        Upload Logo
-                        <ion-icon name="images"></ion-icon>
+            <button ion-button icon-left item-right clear small color="secondary" (click)="logoOrg(org.key)">
+                <ion-icon name="images"></ion-icon>
+                Upload Logo
             </button>
-        </ion-buttons>
         </ion-card-content>
 
         <ion-row class="left-border-primary">

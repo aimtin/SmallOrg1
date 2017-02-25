@@ -11,12 +11,12 @@ export interface IProducts {
     key: string;
     productName: string;
     brand: string;
+    orgKey: string;
     description: string;
     qty: number;
     rate: number;
     amount: number;
     subject: string;
-    orgName: string;
     user: IUser;
 }
 
