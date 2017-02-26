@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, OnChanges, OnDestroy} from '@angular/core';
 import { NavController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
 import { Camera, CameraOptions } from 'ionic-native';
+import { FormControl } from '@angular/forms';
 
 import { CartPage } from '../cart/cart';
 import { IProducts } from '../../shared/interfaces';
@@ -16,18 +17,22 @@ import { SqliteService } from '../../shared/services/sqlite.service';
   templateUrl: 'quotation.html'
 })
 export class QuotationPage implements OnInit, OnDestroy{
-  @ViewChild(Content) content: Content;
-  queryText: string = '';
-  public start: number;
-  public loading: boolean = true;
-  public internetConnected: boolean = true;
-  public refreshFlag: boolean = true;
-  public products: Array<IProducts> = [];
-  public cart: Array<IProducts> = [];
+  	@ViewChild(Content) content: Content;
+  	queryText: string = '';
+  	public start: number;
+  	public loading: boolean = true;
+  	public internetConnected: boolean = true;
+  	public refreshFlag: boolean = true;
+  	public products: Array<IProducts> = [];
+  	public allProducts: Array<IProducts> = [];
+  	public cart: Array<IProducts> = [];
+  	public searchTerm: string = '';
+   	public searchControl: FormControl;
+    public searching: any = false;
   
-  public firebaseConnectionAttempts: number = 0;
+  	public firebaseConnectionAttempts: number = 0;
 
-  constructor(public navCtrl: NavController,
+  	constructor(public navCtrl: NavController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     public authService: AuthService,
@@ -37,7 +42,10 @@ export class QuotationPage implements OnInit, OnDestroy{
     public itemsService: ItemsService,
     public actionSheeCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
-    public events: Events) { }
+    public events: Events)
+    { 
+    	this.searchControl = new FormControl();
+    }
 
   	ngOnInit() {
     	console.log('Quotation Page : ngOnInit ');
@@ -46,7 +54,7 @@ export class QuotationPage implements OnInit, OnDestroy{
 
   	ionViewDidLoad() {
     	console.log('ionViewDidLoad Page');
-  	}
+   	}
 
   	public ngOnDestroy(){
     	console.log('list destroyed');
@@ -105,6 +113,7 @@ export class QuotationPage implements OnInit, OnDestroy{
 
     	if (self.internetConnected) {
       		self.products = [];
+      		self.allProducts = [];
       		self.loadProducts();
     	} else {
       		self.notify('Connection lost. Working offline..');
@@ -122,6 +131,7 @@ export class QuotationPage implements OnInit, OnDestroy{
     	var self = this;
     	self.loading = true;
       	self.products = [];
+      	self.allProducts = [];
       	self.cart = [];
       	self.getProducts();
   	}
@@ -136,6 +146,7 @@ export class QuotationPage implements OnInit, OnDestroy{
           		self.products.push(product);
         	});
         	self.events.publish('Products:viewed');
+        	self.allProducts = self.products;
         	self.loading = false;
       	});
   	}
@@ -174,4 +185,29 @@ export class QuotationPage implements OnInit, OnDestroy{
         	this.notify('Network not found..');
       	}
     }
+
+	onSearchInput(ev: any) {
+		console.log('onSearchInput ');
+    	// Reset items back to all of the items
+    	let self = this;
+    	self.products = self.allProducts;
+
+    	// set val to the value of the searchbar
+    	let val = ev.target.value;
+
+    	// if the value is an empty string don't filter the items
+    	if (val && val.trim() != '') {
+      		self.products = self.products.filter((product) => {
+        		return (product.productName.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      		})
+    	}
+  	}
+
+  	onCancel()
+  	{
+  		console.log('onCancel ');
+  		let self = this;
+    	self.products = self.allProducts;
+  	}
+    
 }

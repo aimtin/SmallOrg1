@@ -14,7 +14,7 @@ import { EmailValidator } from '../../shared/validators/email.validator';
   selector: 'page-product-modify',
   templateUrl: 'product-modify.html'
 })
-export class ProductModifyPage {
+export class ProductModifyPage implements OnInit{
 
   	modifyProductForm: FormGroup;
   	name: AbstractControl;
