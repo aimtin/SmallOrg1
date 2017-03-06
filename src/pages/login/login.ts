@@ -40,10 +40,12 @@ export class LoginPage implements OnInit {
         if (this.loginFirebaseAccountForm.valid) {
 
             let loader = this.loadingCtrl.create({
-                content: 'Signing in firebase..',
+                content: 'Signing in ...',
                 dismissOnPageChange: true
             });
 
+
+            
             loader.present();
 
             let user: UserCredentials = {
@@ -75,4 +77,6 @@ export class LoginPage implements OnInit {
     register() {
         this.nav.push(SignupPage);
     }
+
+
 }

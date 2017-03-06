@@ -1,10 +1,31 @@
-<ion-header>
+<!--<ion-header>
     <ion-navbar hideBackButton color="primary">
-        <ion-title>Login</ion-title>
+        <ion-title>Logingggg</ion-title>
     </ion-navbar>
-</ion-header>
+</ion-header> !-->
 <ion-content padding>
-    <form [formGroup]="loginFirebaseAccountForm" (ngSubmit)="onSubmit(loginFirebaseAccountForm.value)">
+    
+     <ion-row class="logo-row">
+    <ion-col></ion-col>
+    <ion-col width-67 > 
+            <br>
+           <h2 align="center" color="primary"> WINTECHES</h2>
+      <img   align="center" src="assets/images/winteches.png"/>
+       <h1 align="center" > Sign in </h1>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+
+     <form [formGroup]="loginFirebaseAccountForm" (ngSubmit)="onSubmit(loginFirebaseAccountForm.value)">
+
+        <!--<ion-card padding>
+            <ion-card-content>
+                <ion-card-title color="primary" align="center">
+                    WINTECHES
+                </ion-card-title>
+            </ion-card-content>
+            <img src="assets/images/winteches.png" />
+        </ion-card> !-->
         <ion-item [class.error]="!email.valid && email.touched">
             <ion-label floating>Email address</ion-label>
             <ion-input type="text" value="" [formControl]="email"></ion-input>
@@ -18,18 +39,25 @@
         <div *ngIf="password.hasError('required') && password.touched" class="error-box">* Password is required.</div>
         <div *ngIf="password.hasError('minlength') && password.touched" class="error-box">* Minimum password length is 5.</div>
         <br/><br/>
-        <button ion-button type="submit" class="custom-button" [disabled]="!loginFirebaseAccountForm.valid" block>Sign in</button>
+      <div style="text-align:center"> 
+                        <button ion-button align="center" type="submit" class="button1" [disabled]="!loginFirebaseAccountForm.valid" block> Sign in </button>
+                        </div>
         <br/>
-        <button ion-button clear (click)="register()">
+        <br/>
+        <br/>
+        <br/>
+        <div style="text-align:center"> 
+        <button ion-button clear align="center" (click)="register()">
             <ion-icon name='flame'></ion-icon>
-            Register as account</button>
-        <ion-card padding>
-            <img src="assets/images/aimtin.png" />
-            <ion-card-content>
-                <ion-card-title>
-                    Small Organisation
-                </ion-card-title>
-            </ion-card-content>
-        </ion-card>
+            create account</button> 
+          </div>
+          <!--  <ion-fab bottom right edge>
+    <button ion-fab color="secondary" (click)="register()" >
+      <ion-icon name="add">SignUp</ion-icon>
+    </button>
+  </ion-fab> !-->
+        
     </form>
-</ion-content>
+</ion-content> 
+
+

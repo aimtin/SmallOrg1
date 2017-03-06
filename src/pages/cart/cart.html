@@ -1,3 +1,4 @@
+
 <ion-header>
 
   <ion-navbar no-border-bottom color="primary">
@@ -22,19 +23,54 @@
         </p>
     </div>
   	<ion-list *ngIf="!loading">
-    	<forum-quotation *ngFor="let product of products" [product]="product" (onDeleteProducts)="deleteProduct($event)"></forum-quotation>
+  <!--         <ion-item *ngFor="let  product of products" [product]="product" > </ion-item>
+  !-->
+
+   <forum-quotation *ngFor="let product of products" [product]="product" (onDeleteProducts)="deleteProduct($event)"></forum-quotation>
+       
   	</ion-list>
+
+     <ion-fab  bottom right>
+    <button ion-fab color="dark"><ion-icon name="arrow-dropup"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab color="primary" (click)="shareEmail()" > <ion-icon name="mail"></ion-icon>  
+      </button>
+      <button ion-fab color="danger" (click)="otherShare()" ><ion-icon name="md-share"></ion-icon></button>
+      <button ion-fab color="light" ><ion-icon name="download"></ion-icon></button>
+      <button ion-fab color="secondary" ><ion-icon name="mail"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>  
+
 
  </ion-content>
 
 <ion-footer >
   	<ion-toolbar color="primary">
-  		
+     <ion-buttons  >
+      <button ion-button icon-left (click)="otherShare()">
+            share
+            <ion-icon name="share"></ion-icon>
+          </button>
+  		</ion-buttons>
+      <ion-buttons  end>
+          <button ion-button >
+            Download
+            <ion-icon name="download"></ion-icon>
+          </button>
+          
+      </ion-buttons>
     	<ion-buttons end>
-      		<button ion-button icon-right >
+      		<button ion-button icon-right (click)="shareEmail()">
         		Send
         		<ion-icon name="mail"></ion-icon>
       		</button>
+          
     	</ion-buttons>
   	</ion-toolbar>
 </ion-footer>
+
+
+
+
+
+
