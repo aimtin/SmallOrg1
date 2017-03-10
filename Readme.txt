@@ -16,3 +16,12 @@ Plugins
 2)ionic plugin add com-sarriaroman-photoviewer
 3)ionic plugin add cordova-sqlite-storage
 4)ionic plugin add cordova-plugin-inappbrowser
+
+
+
+
+
+For PDF lib
+npm install pdfmake --save
+$ cd  project/www/
+$ git clone https://github.com/bpampuch/pdfmake.git
