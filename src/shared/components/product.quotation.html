@@ -1,25 +1,27 @@
-<ion-item text-wrap>
-    <ion-card>
 
-        <ion-item class="logo">
-        <forum-product-avatar [product]="product"></forum-product-avatar>
-        </ion-item>
 
-        <ion-card-content text-center>
-            <ion-card-title>
+
+
+    
+
+
+       <ion-item >
+        <ion-thumbnail item-left> 
+       <forum-product-avatar  [product]="product"></forum-product-avatar>
+       </ion-thumbnail>
+            <h2>
                 {{product.productName}}
-            </ion-card-title>
-            <p>
-                {{product.description}}
-            </p>
-            <div>
-                <p>{{product.qty}} x ${{product.rate}} =
-                    <strong>${{ product.qty *  product.rate }}</strong>
-                </p>
-            </div>
-        </ion-card-content>
+            </h2>
+                <p>{{product.qty}} x ${{product.rate}} </p>
+                <p>Price=${{ product.qty *  product.rate }}</p>
 
-        <ion-row no-padding>
+
+        <button  ion-button round  outline color="secondary" item-right  (click)="quantityPlus(product)" ><ion-icon color="secondary" name="add"></ion-icon></button>
+        <button  ion-button round outline color="secondary" item-right (click)="quantityMinus(product)" ><ion-icon color="secondary"  name='remove'></ion-icon></button>
+        <button  ion-button round outline color="secondary" item-right  (click)="deleteFromCart(product)" ><ion-icon color="danger" name='trash'></ion-icon></button>
+
+         </ion-item>
+   <!--   <ion-row no-padding>
             <ion-col>
                 <button ion-button clear small color="danger" icon-left>
                     <ion-icon name='trash'></ion-icon>
@@ -27,7 +29,7 @@
             </ion-col>
 
             <ion-col text-center>
-                <button ion-button clear small icon-left>
+                <button ion-button clear small icon-left  (click)="quantityPlus(product)" >
                     <ion-icon name='add'></ion-icon>
                 </button>
             </ion-col>
@@ -37,11 +39,14 @@
                 </button>
             </ion-col>
             <ion-col text-right>
-                <button ion-button clear small icon-left>
+                <button ion-button clear small icon-left (click)="quantityMinus(product)" >
                     <ion-icon name='remove'></ion-icon>
                 </button>
             </ion-col>
-    </ion-row>
-        
-    </ion-card>
-</ion-item>
+
+    </ion-row>  !-->
+
+ 
+    
+
+

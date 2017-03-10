@@ -1,0 +1,54 @@
+
+<ion-navbar *navbar danger >
+    <ion-title>
+        Cart
+    </ion-title>
+</ion-navbar>
+
+
+<ion-content>
+
+    <ion-list>
+    <ion-item>
+
+            <ion-item class="logo">
+        <forum-product-avatar [product]="product"></forum-product-avatar>
+        </ion-item>
+                   
+              <h2>  {{product.productName}} </h2>
+                        <p>
+                {{product.description}}
+            </p>
+            <div>
+                <p>{{product.qty}} x ${{product.rate}} =
+                    <strong>${{ product.qty *  product.rate }}</strong>
+                </p>
+
+            </div>
+
+          <button  clear item-right color="danger"> <ion-icon name='trash'></ion-icon>
+                </button>
+                        
+          <button clear small item-right  (click)="quantityPlus(product)" >
+                    <ion-icon name='add'></ion-icon>
+                </button>
+        
+           <button item-right clear>
+                    {{product.qty}}
+                </button>
+            
+            
+                <button item-right clear small  (click)="quantityMinus(product)" >
+                    <ion-icon name='remove'></ion-icon>
+                </button>
+            
+          </ion-item>
+    
+    
+
+
+
+ </ion-list>
+
+</ion-content>
+    

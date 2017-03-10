@@ -11,6 +11,7 @@ import { DataService } from '../services/data.service';
 export class ProductQuotation implements OnInit, OnDestroy {
     @Input() product: IProducts;
     @Output() onDeleteProducts = new EventEmitter<any>();
+    public products: Array<IProducts> = [];
     
 
     constructor(private dataService: DataService,
@@ -33,6 +34,28 @@ export class ProductQuotation implements OnInit, OnDestroy {
         this.onDeleteProducts.emit(product);
         
     }
+
+     
+
+
+    quantityPlus(product){
+        product.qty += 1;
+    }
+
+    quantityMinus(product){
+        product.qty -= 1;
+    }
+
+
+
+  //  getGrandTotal(): number{
+    //    var amount = 0;
+      //  for(var i = 0; i < this.products.length; i++){
+           // amount += (this.products[i].rate * this.products[i].qty);
+       // }
+       // return amount;
+   // }
+
 
 
 }

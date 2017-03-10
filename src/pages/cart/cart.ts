@@ -13,6 +13,7 @@ import { EmailValidator } from '../../shared/validators/email.validator';
 
 import { NavController } from 'ionic-angular';
 import { SocialSharing } from 'ionic-native';
+import * as pdfmake from 'pdfmake/build/pdfmake';
 
 
 @Component({
@@ -59,9 +60,34 @@ export class CartPage {
 
     }
 
+
+    public OpenPdf() {
+    var dd = { content: ' Winteches INVOICE' };
+         pdfmake.createPdf(dd).open();
+     }
+
+
+    public DownloadPdf() {
+     var dd = { content: 'Winteches INVOICE' };
+      pdfmake.createPdf(dd).download();
+       }
+     
+ 
+
+
+
+    getGrandTotal(): number{
+   var amount = 0;
+   for(var i = 0; i < this.products.length; i++){
+    amount += (this.products[i].rate * this.products[i].qty);
+    }
+  return amount;
+   }
+
+
   
    otherShare(){
-    SocialSharing.share("Genral Share Sheet",null/*Subject*/,null/*File*/,"http://pointdeveloper.com")
+    SocialSharing.share("Your Invoice is attached",null/*Subject*/,null/*File*/,"Share")
     .then(()=>{
         alert("Success");
       },
