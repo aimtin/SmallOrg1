@@ -12,6 +12,8 @@ export class ProductQuotation implements OnInit, OnDestroy {
     @Input() product: IProducts;
     @Output() onDeleteProducts = new EventEmitter<any>();
     public products: Array<IProducts> = [];
+    public quantity: number = 1;
+
     
 
     constructor(private dataService: DataService,
@@ -20,6 +22,7 @@ export class ProductQuotation implements OnInit, OnDestroy {
     ngOnInit() {
         //var self = this;
         //self.dataService.getProductsRef().child(self.product.key).on('child_changed', self.onCommentAdded);
+        this.product.qty = this.quantity;
     }
 
     ngOnDestroy() {
@@ -39,11 +42,17 @@ export class ProductQuotation implements OnInit, OnDestroy {
 
 
     quantityPlus(product){
-        product.qty += 1;
+       this.quantity = this.product.qty;  
+           
+        this.quantity += 1;
+        this.product.qty = this.quantity;
     }
 
     quantityMinus(product){
-        product.qty -= 1;
+    
+      this.quantity = this.product.qty;  
+      this.quantity -= 1;
+      this.product.qty = this.quantity;
     }
 
 

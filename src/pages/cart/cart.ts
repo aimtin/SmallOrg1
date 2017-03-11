@@ -15,6 +15,9 @@ import { NavController } from 'ionic-angular';
 import { SocialSharing } from 'ionic-native';
 import * as pdfmake from 'pdfmake/build/pdfmake';
 
+import { InvoiceService } from '../../shared/services/invoice.service';
+import { ViewPDF } from './pdf-viewer';
+
 
 @Component({
   selector: 'page-cart',
@@ -40,7 +43,8 @@ export class CartPage {
         public dataService: DataService,
         public mappingsService: MappingsService,
         public events: Events,
-        public navCtrl: NavController) 
+        public navCtrl: NavController,
+        public invoiceService: InvoiceService) 
     { }
 
     
@@ -109,5 +113,97 @@ export class CartPage {
 })
 }
 
+
+ onCreateInvoice = function () {
+    let invoice = this.getQuotData();
+    var self = this;
+
+    this.invoiceService.createPdf(invoice)
+      .then(function(pdf) {
+        let blob = new Blob([pdf], {type: 'application/pdf'});
+        let pdfUrl = {pdfUrl: URL.createObjectURL(blob)};
+        let modal = self.modalCtrl.create(ViewPDF, pdfUrl);
+
+        // Display the modal view
+        modal.present();
+      });
+  }
+
+
+   
+getOrgDetails(orgKey: string)
+      {
+        var self = this;
+        self.dataService.getOrg(orgKey).then(function (snap) {
+        let newOrg: IOrganisations = self.mappingsService.getOrg(snap.val(), self.product.orgKey);
+        console.log('Product Org Name' + newOrg.orgName);
+        return newOrg;
+      }, function (error) {
+        return null;
+      });
+     }
+
+
+
+
+  getQuotData()
+     {
+     var self = this;
+        
+          
+     let data: any = {
+     Date: new Date().toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" }),
+
+      AddressFrom: {
+            Name: 'Fred Lahode',
+            Address: 'Chemin Ernest Pisteur',
+            Country: 'Suisse'
+        },
+        AddressTo: {
+            Name: 'Maha Lahode',
+            Address: 'Chemin Ernest Pisteur 11',
+            Country: 'Suisse'
+        },
+        Items: [
+            { Description: 'iPhone 6S', Quantity: '1', Price: '€700' },
+            { Description: 'Samsung Galaxy S6', Quantity: '2', Price: '€655' }
+        ],
+        Subtotal: '€2010',
+        Shipping: '€6',
+        Total: '€2016'
+
+
+
+     }
+
+     
+
+
+
+
+     }
+
+ /* getDummyData() {  
+    return {
+        Date: new Date().toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" }),
+        AddressFrom: {
+            Name: 'Fred Lahode',
+            Address: 'Chemin Ernest Pisteur',
+            Country: 'Suisse'
+        },
+        AddressTo: {
+            Name: 'Maha Lahode',
+            Address: 'Chemin Ernest Pisteur 11',
+            Country: 'Suisse'
+        },
+        Items: [
+            { Description: 'iPhone 6S', Quantity: '1', Price: '€700' },
+            { Description: 'Samsung Galaxy S6', Quantity: '2', Price: '€655' }
+        ],
+        Subtotal: '€2010',
+        Shipping: '€6',
+        Total: '€2016'
+    };
+  }  */
       
 }

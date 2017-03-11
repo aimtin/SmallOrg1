@@ -46,7 +46,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
 
     logoProduct(key: string){
-        this.events.publish('image:created', key);
+        this.events.publish('productImage:created', key);
     }
 
 }

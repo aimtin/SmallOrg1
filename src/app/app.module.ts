@@ -34,6 +34,10 @@ import { UserAvatarComponent } from '../shared/components/user-avatar.component'
 // providers
 import { APP_PROVIDERS } from '../providers/app.providers';
 
+
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { ViewPDF } from '../pages/cart/pdf-viewer';
+
 @NgModule({
   declarations: [
     SmallOrgApp,
@@ -57,7 +61,9 @@ import { APP_PROVIDERS } from '../providers/app.providers';
     OrgModifyPage,
     OrgComponent,
     OrgAvatarComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    PdfViewerComponent,
+    ViewPDF
   ],
   imports: [
     IonicModule.forRoot(SmallOrgApp),
@@ -87,7 +93,9 @@ import { APP_PROVIDERS } from '../providers/app.providers';
     OrgModifyPage,
     OrgComponent,
     OrgAvatarComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    PdfViewerComponent,
+    ViewPDF
   ],
   //providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
   providers: [APP_PROVIDERS]
