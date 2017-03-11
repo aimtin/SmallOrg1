@@ -25,3 +25,7 @@ For PDF lib
 npm install pdfmake --save
 $ cd  project/www/
 $ git clone https://github.com/bpampuch/pdfmake.git
+
+Install plugin for pdf 11-march
+
+npm install ng2-pdf-viewer --save
