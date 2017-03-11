@@ -24,7 +24,7 @@ export class InvoiceService {
   private createDocumentDefinition(invoice) {
 
     var items = invoice.Items.map(function(item) {
-        return [item.Description, item.Quantity, item.Price];
+        return [item.Name, item.Brand,item.Quantity, item.Price, item.Amt];
     });
 
     var dd = {
@@ -32,26 +32,24 @@ export class InvoiceService {
             { text: 'QUOTATION', style: 'header'},
             { text: invoice.Date, alignment: 'right'},
 
-            { text: 'From', style: 'subheader'},
-            invoice.AddressFrom.Name,
-            invoice.AddressFrom.Address,
-            invoice.AddressFrom.Country,        
+       
 
             { text: 'To', style: 'subheader'},
             invoice.AddressTo.Name,
-            invoice.AddressTo.Address,
-            invoice.AddressTo.Country,  
+            invoice.AddressTo.Address, 
 
             { text: 'Items', style: 'subheader'},
             {
                 style: 'itemsTable',
                 table: {
-                    widths: ['*', 75, 75],
+                    widths: ['*', 50, 50, 50, 50],
                     body: [
                         [ 
-                            { text: 'Description', style: 'itemsTableHeader' },
+                            { text: 'Name', style: 'itemsTableHeader' },
+                            { text: 'Brand', style: 'itemsTableHeader' },
                             { text: 'Quantity', style: 'itemsTableHeader' },
                             { text: 'Price', style: 'itemsTableHeader' },
+                            { text: 'Amt', style: 'itemsTableHeader' },
                         ]
                     ].concat(items)
                 }

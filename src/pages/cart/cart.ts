@@ -29,8 +29,10 @@ export class CartPage {
     public internetConnected: boolean = true;
     public refreshFlag: boolean = true;
     public products: Array<IProducts> = [];
+    public items: Array<any> = [];
     public total_qty: number = 0;
     public total_amount: number = 0;
+    productInfo: {Name: string, Brand: string, Quantity: number, Price: number, Amt: number} = {Name: '', Brand: '', Quantity: 0, Price: 0, Amt: 0};
 
     constructor(public actionSheeCtrl: ActionSheetController,
         public modalCtrl: ModalController,
@@ -131,7 +133,7 @@ export class CartPage {
 
 
    
-getOrgDetails(orgKey: string)
+/*getOrgDetails(orgKey: string)
       {
         var self = this;
         self.dataService.getOrg(orgKey).then(function (snap) {
@@ -143,36 +145,41 @@ getOrgDetails(orgKey: string)
       });
      }
 
+  */
+
+
 
 
 
   getQuotData()
      {
      var self = this;
-        
+     self.products.forEach(product => {
+            self.productInfo = {
+                Name: product.productName,
+                Brand: product.brand,
+                Quantity: product.qty,
+                Price: product.rate,
+                Amt: product.amount
+            };
+            self.items.push(self.productInfo);
+        });   
           
      let data: any = {
      Date: new Date().toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" }),
 
-      AddressFrom: {
-            Name: 'Fred Lahode',
-            Address: 'Chemin Ernest Pisteur',
-            Country: 'Suisse'
-        },
         AddressTo: {
-            Name: 'Maha Lahode',
-            Address: 'Chemin Ernest Pisteur 11',
-            Country: 'Suisse'
+          Name: '        ',
+          Address: '     '
+          
         },
-        Items: [
-            { Description: 'iPhone 6S', Quantity: '1', Price: '€700' },
-            { Description: 'Samsung Galaxy S6', Quantity: '2', Price: '€655' }
-        ],
+        Items: self.items,
         Subtotal: '€2010',
         Shipping: '€6',
         Total: '€2016'
 
-
+        };
+        return data;
 
      }
 
@@ -206,4 +213,4 @@ getOrgDetails(orgKey: string)
     };
   }  */
       
-}
+

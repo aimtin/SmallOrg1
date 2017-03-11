@@ -12,6 +12,8 @@ import { MappingsService } from '../../shared/services/mappings.service';
 import { ItemsService } from '../../shared/services/items.service';
 import { SqliteService } from '../../shared/services/sqlite.service';
 
+import { InvoiceService } from '../../shared/services/invoice.service';
+
 @Component({
   selector: 'page-quotation',
   templateUrl: 'quotation.html'
