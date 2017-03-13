@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {  NavController, LoadingController, ToastController, ViewController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/forms';
 
-import { MenuPagePage } from '../menu-page/menu-page';
+//import { MenuPagePage } from '../menu-page/menu-page';
 import { SignupPage } from '../signup/signup';
 import { UserCredentials } from '../../shared/interfaces';
 import { DataService } from '../../shared/services/data.service';
@@ -60,7 +60,7 @@ export class LoginPage implements OnInit {
                     self.vc.dismiss();
                 }).catch(function (error) {
                     // Handle Errors here.
-                    var errorCode = error.code;
+                    //var errorCode = error.code;
                     var errorMessage = error.message;
                     loader.dismiss().then(() => {
                         let toast = self.toastCtrl.create({

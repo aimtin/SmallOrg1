@@ -38,10 +38,10 @@ export class OrgComponent implements OnInit, OnDestroy {
       var self = this;
 
         console.log('deleteOrg : ' + key);
-
-        self.dataService.deleteOrg(key).then(function (snapshot) {
-          
-      });
+        self.events.publish('org:deleted', key);  
+        /*self.dataService.deleteOrg(key).then(function (snapshot) {
+            
+        });*/
 
     }
 

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, OnChanges, OnDestroy} from '@angular/core';
-import { NavController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
+import { Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
+import { NavController, AlertController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
 import { Camera, CameraOptions } from 'ionic-native';
 
 import { IProducts } from '../../shared/interfaces';
@@ -38,6 +38,7 @@ export class QpiItemSettingsPage implements OnInit, OnDestroy{
     public itemsService: ItemsService,
     public actionSheeCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
     public events: Events) { }
 
   	ngOnInit() {
@@ -51,6 +52,10 @@ export class QpiItemSettingsPage implements OnInit, OnDestroy{
 
   	public ngOnDestroy(){
     	console.log('list destroyed');
+      var self = this;
+      self.events.unsubscribe('product:created', self.productsReload);
+      self.events.unsubscribe('product:deleted', self.productsReload);
+      self.events.unsubscribe('productImage:created', self.productImageUpload);
 	}
 
   	ionViewWillEnter() {
@@ -71,7 +76,7 @@ export class QpiItemSettingsPage implements OnInit, OnDestroy{
     	var self = this;
     	self.events.subscribe('network:connected', self.networkConnected);
     	self.events.subscribe('product:created', self.productsReload);
-    	self.events.subscribe('product:deleted', self.productsReload);
+    	self.events.subscribe('product:deleted', self.deleteProduct);
     	self.events.subscribe('productImage:created', self.productImageUpload);
     	console.log('Qpi Page : loadQpiPage ');
     	self.checkFirebase();
@@ -215,15 +220,43 @@ export class QpiItemSettingsPage implements OnInit, OnDestroy{
       	self.loadProducts();
     }
 
+    public deleteProduct = (key) => {
+      console.log('deleteProduct');
+      var self = this;
+      let confirm = self.alertCtrl.create({
+        title: 'Delete Product',
+        message: 'Do you agree to delete Product?',
+        buttons: [
+        {
+            text: 'Disagree',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+        },
+          {
+            text: 'Agree',
+            handler: () => {
+              console.log('Agree clicked');
+              self.dataService.deleteProduct(key).then(function (snapshot) {
+                console.log('Deleted');
+                self.loadProducts();      
+              });
+            }
+          }
+        ]
+      });
+      confirm.present();
+    }
+
   	createProduct() {
     	console.log('Qpi Page : createProduct ');
     	var self = this;
     
-    	let modalPage = this.modalCtrl.create(ProductCreatePage);
+    	let modalPage = self.modalCtrl.create(ProductCreatePage);
 
     	modalPage.onDidDismiss((data: any) => {
       		if (data) {
-        		let toast = this.toastCtrl.create({
+        		let toast = self.toastCtrl.create({
           			message: 'Product created',
           			duration: 3000,
           			position: 'bottom'
@@ -339,10 +372,10 @@ export class QpiItemSettingsPage implements OnInit, OnDestroy{
     {
 
     	let self = this;
-    	let uid = self.authService.getLoggedInUser().uid;
+    	//let uid = self.authService.getLoggedInUser().uid;
     	let progress: number = 0;
     	// display loader
-    	let loader = this.loadingCtrl.create({
+    	let loader = self.loadingCtrl.create({
       		content: 'Uploading image..',
     	});
     	loader.present();
@@ -380,7 +413,7 @@ export class QpiItemSettingsPage implements OnInit, OnDestroy{
       	}, function () {
         	loader.dismiss().then(() => {
           		// Upload completed successfully, now we can get the download URL
-          		var downloadURL = uploadTask.snapshot.downloadURL;
+          		//var downloadURL = uploadTask.snapshot.downloadURL;
           		self.dataService.setProductImage(key,true);
           		self.loadProducts();
         	});

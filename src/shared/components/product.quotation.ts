@@ -33,7 +33,6 @@ export class ProductQuotation implements OnInit, OnDestroy {
 
     deleteFromCart(product: any) {
         console.log('deleteFromCart : ' + product.key);
- 
         this.onDeleteProducts.emit(product);
         
     }

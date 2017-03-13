@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnChanges, OnDestroy} from '@angular/core';
-import { NavController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
+import { NavController, AlertController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
 import { Camera, CameraOptions } from 'ionic-native';
 
 import { IOrganisations } from '../../shared/interfaces';
@@ -39,6 +39,7 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
     public itemsService: ItemsService,
     public actionSheeCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
     public events: Events) { }
 
   ngOnInit() {
@@ -56,7 +57,8 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
 
   public ngOnDestroy(){
     console.log('list destroyed');
-    this.dataService.getOrgsRef().orderByChild('user/uid').equalTo(this.authService.getLoggedInUser().uid).off('child_removed');
+    //this.dataService.getOrgsRef().orderByChild('user/uid').equalTo(this.authService.getLoggedInUser().uid).off('child_removed');
+    this.events.unsubscribe('org:deleted', this.onDelete);
     this.dataService.getOrgsRef().orderByChild('user/uid').equalTo(this.authService.getLoggedInUser().uid).off('child_added');
   }
 
@@ -98,7 +100,8 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
       }, 1000);
     } else {
       console.log('Firebase connection found (orgs.ts) - attempt: ' + self.firebaseConnectionAttempts);
-      self.dataService.getOrgsRef().orderByChild('user/uid').equalTo(self.authService.getLoggedInUser().uid).on('child_removed', self.onChangeReload);
+      //self.dataService.getOrgsRef().orderByChild('user/uid').equalTo(self.authService.getLoggedInUser().uid).on('child_removed', self.onChangeReload);
+      self.events.subscribe('org:deleted', self.onDelete);
       self.dataService.getOrgsRef().orderByChild('user/uid').equalTo(self.authService.getLoggedInUser().uid).on('child_added', self.onOrgAdded);
       if (self.authService.getLoggedInUser() === null) {
         //
@@ -161,33 +164,41 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-    public onChangeReload = (childSnapshot, prevChildKey) => {
+    /*public onChangeReload = (childSnapshot, prevChildKey) => {
       console.log('Org Page : onChangeReload ');
       var self = this;
-      /*let key = childSnapshot.key;
-      self.loading = true;
-      let tempOrgs: Array<IOrganisations> = [];
-      tempOrgs = self.orgs;
-      let newOrg: IOrganisations = self.mappingsService.getOrg(childSnapshot.val(), key);
-      let index: number = 0;
-      self.orgs = [];
-      tempOrgs.forEach(function (org: IOrganisations) {
-        index += 1;
-        if (newOrg.key === org.key){
-          console.log('inderOf :' + index);
-          console.log('org.key :' + org.key);
-          console.log('newOrg.key :' + newOrg.key);
-          tempOrgs.splice( index, 1 );
-        }else {
-            self.orgs.push(org);
-        }
-        
-      });
-      
-      self.events.publish('orgs:viewed');
-      self.loading = false;*/
       self.loadOrgs();
-    }
+    }*/
+    public onDelete = (key) => {
+      console.log('Org Page : onDelete ' + key);
+      var self = this;
+      let confirm = self.alertCtrl.create({
+        title: 'Delete Organisation',
+        message: 'Do you agree to delete organisation?',
+        buttons: [
+        {
+            text: 'Disagree',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+        },
+          {
+            text: 'Agree',
+            handler: () => {
+              console.log('Agree clicked');
+              self.dataService.deleteOrg(key).then(function (snapshot) {
+                  console.log('Deleted');
+                  self.loadOrgs();
+              });
+              
+              
+            }
+          }
+        ]
+      });
+    confirm.present();
+    console.log('Present');
+  }
 
   // Notice function declarion to keep the right this reference
   public onOrgAdded = (childSnapshot, prevChildKey) => {
@@ -238,11 +249,11 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
     console.log('Org Page : createOrg ');
     var self = this;
     
-    let modalPage = this.modalCtrl.create(OrgCreatePage);
+    let modalPage = self.modalCtrl.create(OrgCreatePage);
 
     modalPage.onDidDismiss((data: any) => {
       if (data) {
-        let toast = this.toastCtrl.create({
+        let toast = self.toastCtrl.create({
           message: 'Org created',
           duration: 3000,
           position: 'bottom'
@@ -356,7 +367,7 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
     startUploading(file, key: string) {
 
     let self = this;
-    let uid = self.authService.getLoggedInUser().uid;
+    //let uid = self.authService.getLoggedInUser().uid;
     let progress: number = 0;
     // display loader
     let loader = this.loadingCtrl.create({
@@ -397,7 +408,7 @@ export class OrgsPage implements OnInit, OnChanges, OnDestroy {
       }, function () {
         loader.dismiss().then(() => {
           // Upload completed successfully, now we can get the download URL
-          var downloadURL = uploadTask.snapshot.downloadURL;
+          //var downloadURL = uploadTask.snapshot.downloadURL;
           self.dataService.setOrgImage(key,true);
           self.loadOrgs();
         });

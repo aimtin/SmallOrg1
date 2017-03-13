@@ -7,7 +7,6 @@ import { AuthService } from  '../../shared/services/auth.service';
 import { DataService } from '../../shared/services/data.service';
 import { ItemsService } from '../../shared/services/items.service';
 import { MappingsService } from '../../shared/services/mappings.service';
-import { EmailValidator } from '../../shared/validators/email.validator';
 
 @Component({
   selector: 'page-product-create',

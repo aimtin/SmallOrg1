@@ -1,6 +1,5 @@
 //import { Events } from 'ionic-angular';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
 import { UserCredentials } from '../interfaces';
 

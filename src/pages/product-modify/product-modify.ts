@@ -7,8 +7,8 @@ import { AuthService } from '../../shared/services/auth.service';
 import { DataService } from '../../shared/services/data.service';
 import { MappingsService } from '../../shared/services/mappings.service';
 import { ItemsService } from '../../shared/services/items.service';
-import { SqliteService } from '../../shared/services/sqlite.service';
-import { EmailValidator } from '../../shared/validators/email.validator';
+
+
 
 @Component({
   selector: 'page-product-modify',
@@ -140,7 +140,7 @@ export class ProductModifyPage implements OnInit{
 
           let uid = self.authService.getLoggedInUser().uid;
           self.dataService.getUsername(uid).then(function (snapshot) {
-            let username = snapshot.val();
+            //let username = snapshot.val();
             self.dataService.getUserOrgs(self.authService.getLoggedInUser().uid)
           .then(function (snapshot1) {
 

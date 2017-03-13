@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
 import { IOrganisations, IProducts } from '../interfaces';
-
+import { AuthService } from './auth.service';
+import { MappingsService } from './mappings.service';
+import { ItemsService } from './items.service';
 declare var firebase: any;
 
 @Injectable()
@@ -17,7 +18,11 @@ export class DataService {
     defaultImageUrl: string;
     connected: boolean = false;
 
-    constructor() {
+    constructor(
+        public authService: AuthService,
+        public mappingsService: MappingsService,
+        public itemsService: ItemsService,
+    ) {
         var self = this;
         try {
             self.checkFirebaseConnection();
@@ -166,8 +171,19 @@ export class DataService {
                     console.log('An error occurred!'); 
             
                 });
-            }
+            } 
             self.orgsRef.child(key).remove();
+            console.log('Org deleted successfully');
+            
+        }).then(function(){
+            self.getProductsByOrg(key).then(function (snapshot) {
+                self.itemsService.reversedItems<IProducts>(self.mappingsService.getProducts(snapshot)).forEach(function (product) {
+                    self.deleteProduct(product.key).then(function (snapshot) {
+                        console.log('Product deleted successfully');     
+                    });
+                });
+                
+            });
         });
     }
 

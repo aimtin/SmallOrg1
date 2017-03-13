@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, OnChanges, OnDestroy} from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import { NavController, ModalController, ToastController, Content, Events, LoadingController, ActionSheetController} from 'ionic-angular';
-import { Camera, CameraOptions } from 'ionic-native';
 import { FormControl } from '@angular/forms';
 
 import { CartPage } from '../cart/cart';
@@ -11,8 +10,6 @@ import { DataService } from '../../shared/services/data.service';
 import { MappingsService } from '../../shared/services/mappings.service';
 import { ItemsService } from '../../shared/services/items.service';
 import { SqliteService } from '../../shared/services/sqlite.service';
-
-import { InvoiceService } from '../../shared/services/invoice.service';
 
 @Component({
   selector: 'page-quotation',

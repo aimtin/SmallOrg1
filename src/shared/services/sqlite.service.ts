@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SQLite } from 'ionic-native';
 
-import { IOrganisations, IProducts, IUser } from '../interfaces';
+import { IOrganisations, IUser } from '../interfaces';
 import { ItemsService } from '../services/items.service';
 
 @Injectable()

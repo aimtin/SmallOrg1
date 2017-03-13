@@ -207,7 +207,7 @@ export class ProfilePage implements OnInit {
       }, function () {
         loader.dismiss().then(() => {
           // Upload completed successfully, now we can get the download URL
-          var downloadURL = uploadTask.snapshot.downloadURL;
+          //var downloadURL = uploadTask.snapshot.downloadURL;
           self.dataService.setUserImage(uid);
           self.reload();
         });

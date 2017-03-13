@@ -1,5 +1,5 @@
 import {Component, ViewChild, OnInit } from '@angular/core';
-import {Platform, Nav, MenuController, ViewController, Events, ModalController } from 'ionic-angular';
+import {Platform, MenuController, ViewController, Events, ModalController } from 'ionic-angular';
 import { Network, Splashscreen, StatusBar } from 'ionic-native';
 import { Subscription } from '../../node_modules/rxjs/Subscription';
 
@@ -96,7 +96,7 @@ export class SmallOrgApp implements OnInit{
   ngAfterViewInit() {
     var self = this;
 
-    this.authService.onAuthStateChanged(function (user) {
+    self.authService.onAuthStateChanged(function (user) {
        console.log('SmallOrgApp onAuthStateChanged');
       if (user === null) {
          console.log('SmallOrgApp null');
@@ -104,13 +104,8 @@ export class SmallOrgApp implements OnInit{
         //self.nav.setRoot(LoginPage);
 
         let loginodal = self.modalCtrl.create(LoginPage);
-        /*loginodal.onDidDismiss((user)=> {
-           if(user){
-            self.nav.setRoot(MenuPagePage);
-          }
-        });*/
         loginodal.present();
-        self.nav.setRoot(MenuPagePage);
+        //self.nav.setRoot(MenuPagePage);
       }
       else {
          console.log('SmallOrgApp else');

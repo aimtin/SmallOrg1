@@ -38,10 +38,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       var self = this;
 
         console.log('deleteProduct : ' + key);
-
-        self.dataService.deleteProduct(key).then(function (snapshot) {
+        self.events.publish('product:deleted', key);
+        /*self.dataService.deleteProduct(key).then(function (snapshot) {
             self.events.publish('product:deleted');      
-        });
+        });*/
 
     }
 

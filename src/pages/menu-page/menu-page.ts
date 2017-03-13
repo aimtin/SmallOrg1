@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController, MenuController , NavParams, Events} from 'ionic-angular';
+import { Platform, NavController, MenuController , Events} from 'ionic-angular';
 //import { Platform, Nav } from 'ionic-angular';
 import { OrgsPage } from '../orgs/orgs';
 import { QpiItemSettingsPage } from '../qpi-item-settings/qpi-item-settings';

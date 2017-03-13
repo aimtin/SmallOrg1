@@ -89,7 +89,7 @@ export class SignupPage implements OnInit {
                         });
                 }).catch(function (error) {
                     // Handle Errors here.
-                    var errorCode = error.code;
+                    //var errorCode = error.code;
                     var errorMessage = error.message;
                     console.error(error);
                     loader.dismiss().then(() => {
@@ -165,7 +165,7 @@ export class SignupPage implements OnInit {
             }, function () {
                 loader.dismiss().then(() => {
                     // Upload completed successfully, now we can get the download URL
-                    var downloadURL = uploadTask.snapshot.downloadURL;
+                    //var downloadURL = uploadTask.snapshot.downloadURL;
                     self.dataService.setUserImage(uid);
                 });
             });

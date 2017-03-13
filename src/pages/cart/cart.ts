@@ -1,15 +1,13 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActionSheetController, ModalController, ToastController, LoadingController, NavParams, Content, Events} from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { ActionSheetController, AlertController, ModalController, ToastController, LoadingController, NavParams, Content, Events} from 'ionic-angular';
+import { FormBuilder} from '@angular/forms';
 
-import { IOrganisations, IProducts } from '../../shared/interfaces';
+import { IProducts } from '../../shared/interfaces';
 import { AuthService } from '../../shared/services/auth.service';
 import { DataService } from '../../shared/services/data.service';
 import { MappingsService } from '../../shared/services/mappings.service';
 import { ItemsService } from '../../shared/services/items.service';
-import { SqliteService } from '../../shared/services/sqlite.service';
-import { EmailValidator } from '../../shared/validators/email.validator';
 
 import { NavController } from 'ionic-angular';
 import { SocialSharing } from 'ionic-native';
@@ -46,6 +44,7 @@ export class CartPage {
         public mappingsService: MappingsService,
         public events: Events,
         public navCtrl: NavController,
+        public alertCtrl: AlertController,
         public invoiceService: InvoiceService) 
     { }
 
@@ -63,57 +62,83 @@ export class CartPage {
     deleteProduct(product: any) {
 
       console.log("deleteProduct" + product.key);
+      var self = this;
+      let confirm = self.alertCtrl.create({
+        title: 'Delete Product from Cart',
+        message: 'Do you agree to delete product from cart?',
+        buttons: [
+        {
+            text: 'Disagree',
+            handler: () => {
+              console.log('Disagree clicked');
+            }
+        },
+          {
+            text: 'Agree',
+            handler: () => {
+              console.log('Agree clicked');
+              self.loading = true;
+              let tempProducts = self.products;
+              let index = tempProducts.indexOf(product);
+
+              if(index > -1){
+                tempProducts.splice(index, 1);
+              }
+              self.products = tempProducts;
+              self.loading = false;
+            }
+          }
+        ]
+      });
+      confirm.present();
 
     }
 
 
     public OpenPdf() {
-    var dd = { content: ' Winteches INVOICE' };
-         pdfmake.createPdf(dd).open();
-     }
+      var dd = { content: ' Winteches INVOICE' };
+      pdfmake.createPdf(dd).open();
+    }
 
 
     public DownloadPdf() {
-     var dd = { content: 'Winteches INVOICE' };
+      var dd = { content: 'Winteches INVOICE' };
       pdfmake.createPdf(dd).download();
-       }
+    }
      
  
 
 
 
-    getGrandTotal(): number{
-   var amount = 0;
-   for(var i = 0; i < this.products.length; i++){
-    amount += (this.products[i].rate * this.products[i].qty);
+  getGrandTotal(): number{
+    var amount = 0;
+    for(var i = 0; i < this.products.length; i++){
+      amount += (this.products[i].rate * this.products[i].qty);
     }
-  return amount;
-   }
+    return amount;
+  }
 
 
   
-   otherShare(){
+  otherShare(){
     SocialSharing.share("Your Invoice is attached",null/*Subject*/,null/*File*/,"Share")
     .then(()=>{
         alert("Success");
       },
-      ()=>{
-         alert("failed")
+        ()=>{
+          alert("failed")
       })
- 
   }
 
 
   shareEmail(){
-  SocialSharing.shareViaEmail('Hi,  Your Invoice is attached to this email.', 'INVOICE', null).then(() => {
-  alert("Success");
-},
-()=>{
-   alert("Failed")
-  
-
-})
-}
+    SocialSharing.shareViaEmail('Hi,  Your Invoice is attached to this email.', 'INVOICE', null).then(() => {
+      alert("Success");
+    },
+    ()=>{
+      alert("Failed")
+    })
+  }
 
 
  onCreateInvoice = function () {
@@ -131,42 +156,22 @@ export class CartPage {
       });
   }
 
-
-   
-/*getOrgDetails(orgKey: string)
-      {
-        var self = this;
-        self.dataService.getOrg(orgKey).then(function (snap) {
-        let newOrg: IOrganisations = self.mappingsService.getOrg(snap.val(), self.product.orgKey);
-        console.log('Product Org Name' + newOrg.orgName);
-        return newOrg;
-      }, function (error) {
-        return null;
-      });
-     }
-
-  */
-
-
-
-
-
   getQuotData()
-     {
-     var self = this;
-     self.products.forEach(product => {
-            self.productInfo = {
-                Name: product.productName,
-                Brand: product.brand,
-                Quantity: product.qty,
-                Price: product.rate,
-                Amt: product.amount
-            };
-            self.items.push(self.productInfo);
-        });   
+  {
+      var self = this;
+      self.products.forEach(product => {
+        self.productInfo = {
+          Name: product.productName,
+          Brand: product.brand,
+          Quantity: product.qty,
+          Price: product.rate,
+          Amt: product.amount
+        };
+        self.items.push(self.productInfo);
+      });   
           
-     let data: any = {
-     Date: new Date().toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" }),
+      let data: any = {
+        Date: new Date().toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" }),
 
         AddressTo: {
           Name: '        ',
@@ -178,39 +183,11 @@ export class CartPage {
         Shipping: '€6',
         Total: '€2016'
 
-        };
-        return data;
+      };
+      return data;
 
-     }
+  }
+}
 
-     
-
-
-
-
-     }
-
- /* getDummyData() {  
-    return {
-        Date: new Date().toLocaleDateString("en-IE", { year: "numeric", month: "long", day: "numeric" }),
-        AddressFrom: {
-            Name: 'Fred Lahode',
-            Address: 'Chemin Ernest Pisteur',
-            Country: 'Suisse'
-        },
-        AddressTo: {
-            Name: 'Maha Lahode',
-            Address: 'Chemin Ernest Pisteur 11',
-            Country: 'Suisse'
-        },
-        Items: [
-            { Description: 'iPhone 6S', Quantity: '1', Price: '€700' },
-            { Description: 'Samsung Galaxy S6', Quantity: '2', Price: '€655' }
-        ],
-        Subtotal: '€2010',
-        Shipping: '€6',
-        Total: '€2016'
-    };
-  }  */
-      
+       
 
