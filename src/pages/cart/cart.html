@@ -36,14 +36,15 @@
        
   	</ion-list>
 
-     <ion-fab  bottom right>
+    <ion-fab  bottom right>
     <button ion-fab color="dark"><ion-icon name="arrow-dropup"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab color="primary" (click)="shareEmail()" > <ion-icon name="mail"></ion-icon>  
+      <button ion-fab color="primary" (click)="sharePdfEmail()" > <ion-icon name="mail"></ion-icon>  
       </button>
-      <button ion-fab color="danger" (click)="otherShare()" ><ion-icon name="md-share"></ion-icon></button>
-      <button ion-fab color="light"  (click)="DownloadPdf()"><ion-icon name="download"></ion-icon></button>
-      <button ion-fab color="secondary" (click)="onCreateInvoice()" ><ion-icon name="eye"></ion-icon></button>
+      <button ion-fab color="danger" (click)="exportPDF()" ><ion-icon name="md-share"></ion-icon></button>
+    <!--  <button ion-fab color="light"  (click)="DownloadPdf()"><ion-icon name="download"></ion-icon></button> !-->
+     <button ion-fab color="secondary" (click)="onCreateInvoice()" ><ion-icon name="eye"></ion-icon></button> 
+  
     </ion-fab-list>
   </ion-fab>  
 
@@ -51,31 +52,6 @@
  </ion-content>
 
   
-<!--<ion-footer >
-  	<ion-toolbar color="primary">
-     <ion-buttons  >
-      <button ion-button icon-left (click)="otherShare()">
-            share
-            <ion-icon name="share"></ion-icon>
-          </button>
-  		</ion-buttons>
-      <ion-buttons  end>
-          <button ion-button >
-            Download
-            <ion-icon name="download"></ion-icon>
-          </button>
-          
-      </ion-buttons>
-    	<ion-buttons end>
-      		<button ion-button icon-right (click)="shareEmail()">
-        		Send
-        		<ion-icon name="mail"></ion-icon>
-      		</button>
-          
-    	</ion-buttons>
-  	</ion-toolbar>
-</ion-footer> !-->
-
 
 
 
