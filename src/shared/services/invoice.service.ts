@@ -90,25 +90,24 @@ export class InvoiceService {
                 table: {
                     widths: ['*', 75, 75],
                     body: [
+                        
                         [
                             '',
-                            'Subtotal',
-                            invoice.Subtotal,
+                            'Total Qty',
+                            invoice.TotalQty,
                         ],
                         [
                             '',
-                            'Shipping',
-                            invoice.Shipping,
-                        ],
-                        [
-                            '',
-                            'Total',
-                            invoice.Total,
+                            'Total Amt',
+                            invoice.TotalAmt,
                         ]
                     ]
                 },
                 layout: 'noBorders'
             },
+
+            {text: 'If you have any questions concerning this quotation, Please revert us back', style: 'footerstate'},
+            {text: 'THANK YOU FOR YOUR BUSINESS', style: 'footer'},
         ],
         styles: {
             header: {
@@ -140,6 +139,20 @@ export class InvoiceService {
                 bold: true,
                 margin: [0, 0, 0, 0],
                 alignment: 'left'
+            },
+
+             footerstate: {
+                fontSize: 13,
+                bold: false,
+                margin: [0, 50, 0, 0],
+                alignment: 'center'
+            },
+
+            footer: {
+                fontSize: 14,
+                bold: true,
+                margin: [0, 10, 0, 0],
+                alignment: 'center'
             },
         },
         defaultStyle: {

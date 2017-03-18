@@ -120,6 +120,14 @@ export class CartPage {
     return amount;
   }
 
+   getTotalQty(): number{
+    var TotQty = 0;
+    for(var i = 0; i < this.products.length; i++){
+      TotQty += this.products[i].qty;
+    }
+    return TotQty;
+  }
+
 
   
   otherShare(){
@@ -394,6 +402,8 @@ exportPDF = function () {
   getQuotData()
      {
      var self = this;
+     var Tot = self.getGrandTotal();
+     var TotQty = self.getTotalQty();
      self.products.forEach(product => {
             self.productInfo = {
                 Name: product.productName,
@@ -414,10 +424,10 @@ exportPDF = function () {
           
         },
         Items: self.items,
-        Subtotal: '€2010',
-        Shipping: '€6',
-        Total: '€2016'
-
+        
+        TotalQty: TotQty,
+        TotalAmt:    Tot
+        
         };
         return data;
 

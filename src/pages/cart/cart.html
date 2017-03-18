@@ -14,9 +14,14 @@
 
 <ion-content>
 
+
     <ion-item *ngIf="products.length" >
-        <h2 color="secondary">TOTAL AMOUNT: </h2>        
-        <h2 color="secondary" item-right >${{getGrandTotal()}}</h2>
+        <h3 color="secondary">Total Quantity: </h3>        
+        <h3 color="secondary" item-right >{{getTotalQty()}}</h3>
+     </ion-item>
+     <ion-item *ngIf="products.length" >
+        <h3 color="secondary">Total Amount: </h3>        
+        <h3 color="secondary" item-right >${{getGrandTotal()}}</h3>
     </ion-item>
 
        <ion-item *ngIf="!products.length" >
