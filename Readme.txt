@@ -1,3 +1,9 @@
+
+----May 25 2017:  Uploaded Invoice service.ts file for Quotation format working
+=====
+
+
+
 Ionic commands
 npm install -g cordova ionic
 1) Creating project
